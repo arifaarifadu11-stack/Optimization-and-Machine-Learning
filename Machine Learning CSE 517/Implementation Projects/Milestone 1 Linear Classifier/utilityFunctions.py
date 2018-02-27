@@ -13,21 +13,34 @@ def splitTrainingTestingData(X,Y,CROSS_VALIDATION_K,n_K):
     sampleSize=nSamples//CROSS_VALIDATION_K
     
     Xtrain1=X[0:n_K*sampleSize,:]
-    Xtest=X[n_K*sampleSize:max((n_K+1)*sampleSize,nSamples),:]
-    Xtrain2=X[max((n_K+1)*sampleSize,nSamples):,:]
-    Xtrain=np.concatenate(Xtrain1,Xtrain2,axis=0)
+    Xtest=X[n_K*sampleSize:(n_K+1)*sampleSize,:]
+    Xtrain2=X[(n_K+1)*sampleSize:,:]
+    if Xtrain1.size:
+        if Xtrain2.size:
+            Xtrain=np.concatenate((Xtrain1,Xtrain2),axis=0)
+        else:
+            Xtrain=Xtrain1
+    else:
+        Xtrain=Xtrain2
+    
     
     Ytrain1=Y[0:n_K*sampleSize,:]
-    Ytest=Y[n_K*sampleSize:max((n_K+1)*sampleSize,nSamples),:]
-    Ytrain2=Y[max((n_K+1)*sampleSize,nSamples):,:]
-    Ytrain=np.concatenate(Ytrain1,Ytrain2,axis=0)
+    Ytest=Y[n_K*sampleSize:(n_K+1)*sampleSize,:]
+    Ytrain2=Y[(n_K+1)*sampleSize:,:]
+    if Ytrain1.size:
+        if Ytrain2.size:
+            Ytrain=np.concatenate((Ytrain1,Ytrain2),axis=0)
+        else:
+            Ytrain=Ytrain1
+    else:
+        Ytrain=Ytrain2
     
     return Xtrain,Ytrain,Xtest,Ytest
     
     
     
     
-def training(Xtrain,Ytrain,lamda=0):
+def trainLinerModel(Xtrain,Ytrain,lamda=0):
     nSamples,nFeatures=Xtrain.shape
     #Hessian Calculation
     H=np.dot(Xtrain.transpose(),Xtrain)+lamda*np.eye(nFeatures)
@@ -38,7 +51,7 @@ def training(Xtrain,Ytrain,lamda=0):
     return w
 
 
-def testing(Xtest,Ytest,w):
+def testLinearModel(Xtest,Ytest,w):
     TP=0    #True positive
     TN=0    #True Negative
     FP=0    #False positive

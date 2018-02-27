@@ -17,13 +17,13 @@ NO_OF_SAMPLES=569
 CROSS_VALIDATION_K=10
 
 #######################################
-#X(i) is feature vector, Y(i) is label for i-the sample
+#for i-th sample
+#X(i) is feature vector, Y(i) is label 
 ########################################
 X=np.ones((NO_OF_SAMPLES,NO_OF_FEATURES+1))
 Y=np.zeros((NO_OF_SAMPLES,1))
 W=np.zeros((NO_OF_FEATURES,1))
 
-#print(label)
 ##########################################
 # Reading file and formatting data
 ##########################################
@@ -41,10 +41,36 @@ for line in fileInput:
        
 fileInput.close()
 
-####################################
-#Training & Testing
-###################################
+##########################################
+# Training and Testing
+##########################################
 accuracyMeasures=np.array([0, 0, 0, 0]);#TP,TN,FP,FN
-for n_k in CROSS_VALIDATION_K:
-    ss
+for n_K in range(CROSS_VALIDATION_K):
+    xTrain,yTrain,xTest,yTest=splitTrainingTestingData(X,Y,CROSS_VALIDATION_K,n_K)
+    #print(xTrain.shape)
+    #print(xTest.shape)
+    w=trainLinerModel(xTrain,yTrain,0.1)
+    accuracyMeasures=accuracyMeasures+testLinearModel(xTest,yTest,w)
+    
+##########################################
+# Performance Measurements
+##########################################
+
+TP,TN,FP,FN=accuracyMeasures
+TRP=TP/(TP+FN)*100
+SPC=TN/(TN+FP)*100
+PPV= TP/(TP+FP)*100
+NPV=TN/(TN+FN)*100
+ACC=(TP+TN)/(TP+TN+FP+FN)*100
+    
+##########################################
+# Display results
+##########################################    
+print("Sensitivity= "+str(TRP)+"%")
+print("Specificity= "+str(SPC)+"%")
+print("PPV= "+str(PPV)+"%")
+print("NPV= "+str(NPV)+"%")
+print("Accuracy= "+str(ACC)+"%")
+
+
 
