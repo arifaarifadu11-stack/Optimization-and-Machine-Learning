@@ -9,14 +9,18 @@ wisconsin breast cancer database used
 """
 
 import numpy as np
+import timeit
 from utilityFunctions import *
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.gaussian_process.kernels import RBF, RationalQuadratic
-#user defined parameters
+
+#constant parameters
 NO_OF_FEATURES=30
 NO_OF_SAMPLES=569
+
+#user defined parameters
 CROSS_VALIDATION_K=10
-kernel_type='RationalQuadratic' # options :'RBF',  'RationalQuadratic'
+kernel_type='RBF' # options :'RBF',  'RationalQuadratic'
 
 #######################################
 #for i-th sample
@@ -50,15 +54,20 @@ Y=Y[200:]
 # Optimal Parameter selection
 #########################################
 RBF_scale=1.0
-RBF_magnitude=1.0
+RBF_magnitude=10.0
 RQ_scale=1.0
-RQ_alpha=1.0
+RQ_alpha=10.0
 
 if kernel_type=='RBF':
     RBF_scale,RBF_magnitude=getBestParametersRBF(Xvalidation,Yvalidation)
+    print(' ')
+    print('optimum RBF scale= '+str(RBF_scale))
     
 if kernel_type=='RationalQuadratic':
     RQ_scale,RQ_alpha=getBestParametersRQ(Xvalidation,Yvalidation)
+    print(' ')
+    print('optimum RQ scale= '+str(RQ_scale))
+    print('optimum RQ alpha= '+str(RQ_alpha))
      
 ##########################################
 # Training and Testing
@@ -74,10 +83,13 @@ gp=GaussianProcessClassifier(kernel=kernel_gp)
 accuracyMeasures=np.array([0, 0, 0, 0]);#TP,TN,FP,FN
 for n_K in range(CROSS_VALIDATION_K):
     xTrain,yTrain,xTest,yTest=splitTrainingTestingData(X,Y,CROSS_VALIDATION_K,n_K)
+    #start = timeit.default_timer()
     trainGPModel(xTrain,yTrain,gp)
-    probs=gp.predict_proba(xTest)
-    print(sum(-np.log(probs[i][(1+yTest[i])//2]) for i in range(probs.shape[0]))/probs.shape[0])
+    #stop1 = timeit.default_timer()
     accuracyMeasures=accuracyMeasures+testGPModel(xTest,yTest,gp)
+    #stop2 = timeit.default_timer()
+    #print(stop1-start)
+    #print(stop2-stop1)
     
 ##########################################
 # Performance Measurements

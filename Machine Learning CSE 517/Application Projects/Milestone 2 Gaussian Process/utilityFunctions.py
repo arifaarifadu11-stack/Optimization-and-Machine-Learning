@@ -74,25 +74,30 @@ def getBestParametersRBF(X,Y):
     nMag=10
     nScale=10
     nValidation=2
-    magnitudes=np.logspace(-2,4,nMag)
-    scales=np.logspace(-1,2,nScale)
+    magnitudes=np.logspace(-2,4,nMag) #10^-2 to 10^4
+    scales=np.logspace(-1,2,nScale) #10^-1 to 10^2
     nlpd=np.zeros((nMag,nScale))
+    
     for i in range(nMag):
         for j in range(nScale):
             sumProb=0.0
             numProb=0
+            
             for n_k in range(nValidation):
                 gp=GaussianProcessClassifier(kernel=magnitudes[i]* RBF(scales[j]))
                 xTrain,yTrain,xTest,yTest=splitTrainingTestingData(X,Y,nValidation,n_k)
                 gp.fit(xTrain,yTrain)
+                #get prediction probabilities
                 probs=gp.predict_proba(xTest)
                 sumProb+=sum(-np.log(probs[i][(1+yTest[i])//2]) for i in range(probs.shape[0]))
                 numProb+=probs.shape[0]
-            
+                
+            #calculate negtive log predictive density
             nlpd[i,j]=sumProb/numProb
                 
             
-    id_x,id_y=np.unravel_index(nlpd.argmin(), nlpd.shape)
+    id_x,id_y=np.unravel_index(nlpd.argmin(), nlpd.shape) #index of minimum value of NLPD
+    #3D plot of NLPD
     X,Y=np.meshgrid(magnitudes,scales)
     nlpd=np.transpose(nlpd)
     fig = plt.figure()
@@ -107,28 +112,33 @@ def getBestParametersRBF(X,Y):
     return scales[id_y],magnitudes[id_x]
 
 def getBestParametersRQ(X,Y):
-    nAlpha=3
-    nScale=3
+    nAlpha=10
+    nScale=10
     nValidation=2
     alphas=np.logspace(-1,1,nAlpha)
     scales=np.logspace(-1,2,nScale)
     nlpd=np.zeros((nAlpha,nScale))
+    
     for i in range(nAlpha):
         for j in range(nScale):
             sumProb=0.0
             numProb=0
+            
             for n_k in range(nValidation):
                 gp=GaussianProcessClassifier(kernel=RationalQuadratic(alpha=alphas[i],length_scale=scales[j]))
                 xTrain,yTrain,xTest,yTest=splitTrainingTestingData(X,Y,nValidation,n_k)
                 gp.fit(xTrain,yTrain)
+                #get prediction probabilities
                 probs=gp.predict_proba(xTest)
                 sumProb+=sum(-np.log(probs[i][(1+yTest[i])//2]) for i in range(probs.shape[0]))
                 numProb+=probs.shape[0]
-            
+                
+            #calculate negtive log predictive density
             nlpd[i,j]=sumProb/numProb
                 
             
-    id_x,id_y=np.unravel_index(nlpd.argmin(), nlpd.shape)
+    id_x,id_y=np.unravel_index(nlpd.argmin(), nlpd.shape) #index of minimum value of NLPD
+    #3D plot of NLPD
     X,Y=np.meshgrid(alphas,scales)
     nlpd=np.transpose(nlpd)
     fig = plt.figure()
