@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Implementation project
-Milestone 3
-Gausssian process
+Milestone 1
+Linear Model
 wisconsin breast cancer database used 
 
 @author: KMShihab
