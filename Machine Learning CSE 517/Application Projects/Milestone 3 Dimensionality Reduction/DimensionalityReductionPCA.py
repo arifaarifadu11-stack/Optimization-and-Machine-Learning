@@ -12,11 +12,27 @@ import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib
 from sklearn.decomposition import PCA
+from LinearModel import runLinearModel
+from GaussianProcess import runGPModel
 
 #Constant parameters
 NO_OF_FEATURES=30
 NO_OF_SAMPLES=569
 CROSS_VALIDATION_K=10
+
+#User selected parameters
+methodClassification='GP' #options: 'Linear', 'GP'
+
+#optimal model parameters calculated from previous milestones
+lamda=0.1
+kernel_type='RBF' #options: 'RBF', 'RationalQuadratic'
+kernel_params=[1.0,10.0]
+
+if kernel_type=='RBF':
+    kernel_params=[4.6416,10.0] #[scale,magnitude]
+if kernel_type=='RationalQuadratic':
+    kernel_params=[1.0,10.0] #[scale, alpha]
+
 
 #######################################
 #for i-th sample
@@ -43,18 +59,19 @@ for line in fileInput:
        
 fileInput.close()
 
+##########################################
+# data visualization
+##########################################
+
 #pca=PCA()
 #pca.fit(X)
 #d=np.argmax(np.cumsum(pca.explained_variance_ratio_)>=0.99)+1
 #pca=PCA(n_components=d)
 
-
-##########################################
-# data visualization
-##########################################
 pca=PCA(n_components=0.99)
 X_reduced=pca.fit_transform(X)
 
+"""
 plot_x=X_reduced[:,0]
 plot_y=X_reduced[:,1]
 
@@ -67,8 +84,26 @@ malignantY=np.array([X_reduced[i][1] for i in range(NO_OF_SAMPLES) if Y[i]==1])
 plt.scatter(malignantX, malignantY, s=None, marker='+', c="r")
 
 plt.show()
+"""
 
-
+##########################################
+# comparison of reduced and original data
+##########################################
+    
+if methodClassification=='Linear':
+    print('Original data set: ')
+    runLinearModel(X,Y,lamda,CROSS_VALIDATION_K)
+    
+    print('\n\nReduced data set: ')
+    runLinearModel(X_reduced,Y,lamda,CROSS_VALIDATION_K)
+    
+    
+if methodClassification=='GP':
+    print('Original data set: ')
+    #runGPModel(X,Y,lamda,CROSS_VALIDATION_K,kernel_type,kernel_params)
+    
+    print('\n\nReduced data set: ')
+    runGPModel(X_reduced,Y,CROSS_VALIDATION_K,kernel_type,kernel_params)
 
 
 
