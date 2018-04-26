@@ -22,10 +22,10 @@ CROSS_VALIDATION_K=10
 
 #User selected parameters
 methodClassification='Linear' #options: 'Linear', 'GP'
+kernel_type='RBF' #options: 'RBF', 'RationalQuadratic'
 
 #optimal model parameters calculated from previous milestones
 lamda=0.1
-kernel_type='RBF' #options: 'RBF', 'RationalQuadratic'
 kernel_params=[1.0,10.0]
 
 if kernel_type=='RBF':
@@ -72,7 +72,7 @@ fileInput.close()
 pca=PCA(n_components=0.99)
 X_reduced=pca.fit_transform(X)
 
-"""
+
 plot_x=X_reduced[:,0]
 plot_y=X_reduced[:,1]
 
@@ -87,7 +87,7 @@ plt.scatter(malignantX, malignantY, s=None, marker='.', c="r",label="malignant t
 plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 
 plt.show()
-"""
+
 
 ##########################################
 # comparison of reduced and original data
@@ -103,7 +103,7 @@ if methodClassification=='Linear':
     
 if methodClassification=='GP':
     print('Original data set: ')
-    #runGPModel(X,Y,lamda,CROSS_VALIDATION_K,kernel_type,kernel_params)
+    runGPModel(X,Y,CROSS_VALIDATION_K,kernel_type,kernel_params)
     
     print('\n\nReduced data set: ')
     runGPModel(X_reduced,Y,CROSS_VALIDATION_K,kernel_type,kernel_params)
