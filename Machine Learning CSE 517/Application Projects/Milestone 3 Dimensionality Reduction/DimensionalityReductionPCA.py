@@ -21,7 +21,7 @@ NO_OF_SAMPLES=569
 CROSS_VALIDATION_K=10
 
 #User selected parameters
-methodClassification='GP' #options: 'Linear', 'GP'
+methodClassification='Linear' #options: 'Linear', 'GP'
 
 #optimal model parameters calculated from previous milestones
 lamda=0.1
@@ -65,6 +65,7 @@ fileInput.close()
 
 #pca=PCA()
 #pca.fit(X)
+#print(pca.explained_variance_ratio_[:5])
 #d=np.argmax(np.cumsum(pca.explained_variance_ratio_)>=0.99)+1
 #pca=PCA(n_components=d)
 
@@ -77,11 +78,13 @@ plot_y=X_reduced[:,1]
 
 benignX=np.array([X_reduced[i][0] for i in range(NO_OF_SAMPLES) if Y[i]==-1])
 benignY=np.array([X_reduced[i][1] for i in range(NO_OF_SAMPLES) if Y[i]==-1])
-plt.scatter(benignX, benignY, s=None, marker='+', c="k")
+plt.scatter(benignX, benignY, s=None, marker='.', c="k",label="benign tumor")
 
 malignantX=np.array([X_reduced[i][0] for i in range(NO_OF_SAMPLES) if Y[i]==1])
 malignantY=np.array([X_reduced[i][1] for i in range(NO_OF_SAMPLES) if Y[i]==1])
-plt.scatter(malignantX, malignantY, s=None, marker='+', c="r")
+plt.scatter(malignantX, malignantY, s=None, marker='.', c="r",label="malignant tumor")
+
+plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 
 plt.show()
 """
