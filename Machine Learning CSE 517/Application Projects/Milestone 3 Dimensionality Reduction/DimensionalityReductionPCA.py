@@ -7,7 +7,7 @@ wisconsin breast cancer database used
 
 @author: KMShihab
 """
-
+import time
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib
@@ -68,9 +68,11 @@ fileInput.close()
 #print(pca.explained_variance_ratio_[:5])
 #d=np.argmax(np.cumsum(pca.explained_variance_ratio_)>=0.99)+1
 #pca=PCA(n_components=d)
-
+start_time=time.clock()
 pca=PCA(n_components=0.99)
 X_reduced=pca.fit_transform(X)
+end_time=time.clock()
+print('PCA time= '+"{:0.6f}".format(end_time-start_time))
 
 
 plot_x=X_reduced[:,0]
