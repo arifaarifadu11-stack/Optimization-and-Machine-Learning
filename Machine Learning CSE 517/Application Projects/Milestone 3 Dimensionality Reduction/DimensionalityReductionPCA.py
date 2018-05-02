@@ -72,7 +72,7 @@ fileInput.close()
 pca=PCA(n_components=0.99)
 X_reduced=pca.fit_transform(X)
 
-
+"""
 plot_x=X_reduced[:,0]
 plot_y=X_reduced[:,1]
 
@@ -88,7 +88,7 @@ plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 
 plt.show()
 
-
+"""
 ##########################################
 # comparison of reduced and original data
 ##########################################
