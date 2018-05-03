@@ -7,16 +7,37 @@ wisconsin breast cancer database used
 
 @author: KMShihab
 """
-import time
-import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib
-from sklearn.decomposition import PCA
-from LinearModel import runLinearModel
-from GaussianProcess import runGPModel
+from scipy import stats
+import matplotlib.pyplot as plt
 
-linear_original=[0]*10
-linear_reduced=[0]*10               
+CROSS_VALIDATION_K=10
+NO_OF_RUNS=7
+
+# resultAll : for storing for all runs and cross-validations
+#1st row: Linear without DR
+#2nd row: Linear with DR
+#3rd row: GP RBF without DR
+#4th row: GP RBF with DR
+#5th row: GP RQ without DR
+#6th row: GP RQ with DR
+resultAll=np.zeros((6,CROSS_VALIDATION_K*NO_OF_RUNS))
+
+for nRun in range(NO_OF_RUNS):
+    fileName='resultRun'+str(nRun+1)+'.txt'
+    lines = [line.rstrip('\n') for line in open(fileName)]
+    for lineIndex in range(len(lines)):
+        resultAll[lineIndex,nRun*CROSS_VALIDATION_K:(nRun+1)*CROSS_VALIDATION_K]=list(map(float,lines[lineIndex].split()))
+        
+
+for i in range(6):
+    for j in range(6):
+        t,p=stats.ttest_ind(resultAll[j,:],resultAll[i,:])
+        if p>0.5:
+            p=1.0-p
+        print('{0:.3f}'.format(p),end='\t')
+    print('\n')
+
 
 
 
