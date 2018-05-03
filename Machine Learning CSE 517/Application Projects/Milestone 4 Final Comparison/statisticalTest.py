@@ -12,7 +12,7 @@ from scipy import stats
 import matplotlib.pyplot as plt
 
 CROSS_VALIDATION_K=10
-NO_OF_RUNS=7
+NO_OF_RUNS=10
 
 # resultAll : for storing for all runs and cross-validations
 #1st row: Linear without DR
@@ -32,15 +32,16 @@ for nRun in range(NO_OF_RUNS):
 
 for i in range(6):
     for j in range(6):
-        t,p=stats.ttest_ind(resultAll[j,:],resultAll[i,:])
-        if p>0.5:
-            p=1.0-p
-        print('{0:.3f}'.format(p),end='\t')
+        t,p=stats.ttest_rel(resultAll[j,:],resultAll[i,:])
+        print('{0:.3f}'.format(p),end=' ')
+        print('{0:.3f}'.format(t),end='\t')
     print('\n')
 
-
-
-
+"""
+fValue,pValue=stats.f_oneway(resultAll[0,:],resultAll[1,:],resultAll[2,:],resultAll[3,:],resultAll[4,:],resultAll[5,:])
+print(fValue)
+print(pValue)
+"""
 
 
 
