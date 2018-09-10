@@ -1,751 +1,668 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
-
-<html>
-<head>
-  <title></title>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <style type="text/css">
-td.linenos { background-color: #f0f0f0; padding-right: 10px; }
-span.lineno { background-color: #f0f0f0; padding: 0 5px 0 5px; }
-pre { line-height: 125%; }
-body .hll { background-color: #ffffcc }
-body  { background: #f8f8f8; }
-body .c { color: #408080; font-style: italic } /* Comment */
-body .err { border: 1px solid #FF0000 } /* Error */
-body .k { color: #008000; font-weight: bold } /* Keyword */
-body .o { color: #666666 } /* Operator */
-body .cm { color: #408080; font-style: italic } /* Comment.Multiline */
-body .cp { color: #BC7A00 } /* Comment.Preproc */
-body .c1 { color: #408080; font-style: italic } /* Comment.Single */
-body .cs { color: #408080; font-style: italic } /* Comment.Special */
-body .gd { color: #A00000 } /* Generic.Deleted */
-body .ge { font-style: italic } /* Generic.Emph */
-body .gr { color: #FF0000 } /* Generic.Error */
-body .gh { color: #000080; font-weight: bold } /* Generic.Heading */
-body .gi { color: #00A000 } /* Generic.Inserted */
-body .go { color: #888888 } /* Generic.Output */
-body .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
-body .gs { font-weight: bold } /* Generic.Strong */
-body .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
-body .gt { color: #0044DD } /* Generic.Traceback */
-body .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
-body .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
-body .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
-body .kp { color: #008000 } /* Keyword.Pseudo */
-body .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
-body .kt { color: #B00040 } /* Keyword.Type */
-body .m { color: #666666 } /* Literal.Number */
-body .s { color: #BA2121 } /* Literal.String */
-body .na { color: #7D9029 } /* Name.Attribute */
-body .nb { color: #008000 } /* Name.Builtin */
-body .nc { color: #0000FF; font-weight: bold } /* Name.Class */
-body .no { color: #880000 } /* Name.Constant */
-body .nd { color: #AA22FF } /* Name.Decorator */
-body .ni { color: #999999; font-weight: bold } /* Name.Entity */
-body .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
-body .nf { color: #0000FF } /* Name.Function */
-body .nl { color: #A0A000 } /* Name.Label */
-body .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
-body .nt { color: #008000; font-weight: bold } /* Name.Tag */
-body .nv { color: #19177C } /* Name.Variable */
-body .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
-body .w { color: #bbbbbb } /* Text.Whitespace */
-body .mb { color: #666666 } /* Literal.Number.Bin */
-body .mf { color: #666666 } /* Literal.Number.Float */
-body .mh { color: #666666 } /* Literal.Number.Hex */
-body .mi { color: #666666 } /* Literal.Number.Integer */
-body .mo { color: #666666 } /* Literal.Number.Oct */
-body .sb { color: #BA2121 } /* Literal.String.Backtick */
-body .sc { color: #BA2121 } /* Literal.String.Char */
-body .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
-body .s2 { color: #BA2121 } /* Literal.String.Double */
-body .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
-body .sh { color: #BA2121 } /* Literal.String.Heredoc */
-body .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
-body .sx { color: #008000 } /* Literal.String.Other */
-body .sr { color: #BB6688 } /* Literal.String.Regex */
-body .s1 { color: #BA2121 } /* Literal.String.Single */
-body .ss { color: #19177C } /* Literal.String.Symbol */
-body .bp { color: #008000 } /* Name.Builtin.Pseudo */
-body .vc { color: #19177C } /* Name.Variable.Class */
-body .vg { color: #19177C } /* Name.Variable.Global */
-body .vi { color: #19177C } /* Name.Variable.Instance */
-body .il { color: #666666 } /* Literal.Number.Integer.Long */
-
-  </style>
-</head>
-<body>
-<h2></h2>
-
-<div class="highlight"><pre><span class="c"># graphicsDisplay.py</span>
-<span class="c"># ------------------</span>
-<span class="c"># Licensing Information: Please do not distribute or publish solutions to this</span>
-<span class="c"># project. You are free to use and extend these projects for educational</span>
-<span class="c"># purposes. The Pacman AI projects were developed at UC Berkeley, primarily by</span>
-<span class="c"># John DeNero (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).</span>
-<span class="c"># For more info, see http://inst.eecs.berkeley.edu/~cs188/sp09/pacman.html</span>
-
-<span class="kn">from</span> <span class="nn">graphicsUtils</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">game</span> <span class="kn">import</span> <span class="n">Directions</span>
-
-<span class="c">###########################</span>
-<span class="c">#  GRAPHICS DISPLAY CODE  #</span>
-<span class="c">###########################</span>
-
-<span class="c"># Most code by Dan Klein and John Denero written or rewritten for cs188, UC Berkeley.</span>
-<span class="c"># Some code from a Pacman implementation by LiveWires, and used / modified with permission.</span>
-
-<span class="n">DEFAULT_GRID_SIZE</span> <span class="o">=</span> <span class="mf">30.0</span>
-<span class="n">INFO_PANE_HEIGHT</span> <span class="o">=</span> <span class="mi">35</span>
-<span class="n">BACKGROUND_COLOR</span> <span class="o">=</span> <span class="n">formatColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">WALL_COLOR</span> <span class="o">=</span> <span class="n">formatColor</span><span class="p">(</span><span class="mf">0.0</span><span class="o">/</span><span class="mf">255.0</span><span class="p">,</span> <span class="mf">51.0</span><span class="o">/</span><span class="mf">255.0</span><span class="p">,</span> <span class="mf">255.0</span><span class="o">/</span><span class="mf">255.0</span><span class="p">)</span>
-<span class="n">INFO_PANE_COLOR</span> <span class="o">=</span> <span class="n">formatColor</span><span class="p">(</span><span class="o">.</span><span class="mi">4</span><span class="p">,</span><span class="o">.</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">SCORE_COLOR</span> <span class="o">=</span> <span class="n">formatColor</span><span class="p">(</span><span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="o">.</span><span class="mi">9</span><span class="p">)</span>
-<span class="n">PACMAN_OUTLINE_WIDTH</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">PACMAN_CAPTURE_OUTLINE_WIDTH</span> <span class="o">=</span> <span class="mi">4</span>
-
-<span class="n">GHOST_COLORS</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">GHOST_COLORS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">formatColor</span><span class="p">(</span><span class="o">.</span><span class="mi">9</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span> <span class="c"># Red</span>
-<span class="n">GHOST_COLORS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">formatColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">.</span><span class="mi">3</span><span class="p">,</span><span class="o">.</span><span class="mi">9</span><span class="p">))</span> <span class="c"># Blue</span>
-<span class="n">GHOST_COLORS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">formatColor</span><span class="p">(</span><span class="o">.</span><span class="mi">98</span><span class="p">,</span><span class="o">.</span><span class="mi">41</span><span class="p">,</span><span class="o">.</span><span class="mo">07</span><span class="p">))</span> <span class="c"># Orange</span>
-<span class="n">GHOST_COLORS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">formatColor</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span><span class="o">.</span><span class="mi">75</span><span class="p">,</span><span class="o">.</span><span class="mi">7</span><span class="p">))</span> <span class="c"># Green</span>
-<span class="n">GHOST_COLORS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">formatColor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.6</span><span class="p">,</span><span class="mf">0.0</span><span class="p">))</span> <span class="c"># Yellow</span>
-<span class="n">GHOST_COLORS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">formatColor</span><span class="p">(</span><span class="o">.</span><span class="mi">4</span><span class="p">,</span><span class="mf">0.13</span><span class="p">,</span><span class="mf">0.91</span><span class="p">))</span> <span class="c"># Purple</span>
-
-<span class="n">TEAM_COLORS</span> <span class="o">=</span> <span class="n">GHOST_COLORS</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
-
-<span class="n">GHOST_SHAPE</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span> <span class="mi">0</span><span class="p">,</span>    <span class="mf">0.3</span> <span class="p">),</span>
-    <span class="p">(</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.75</span> <span class="p">),</span>
-    <span class="p">(</span> <span class="mf">0.5</span><span class="p">,</span>  <span class="mf">0.3</span> <span class="p">),</span>
-    <span class="p">(</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.75</span> <span class="p">),</span>
-    <span class="p">(</span> <span class="mf">0.75</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span> <span class="p">),</span>
-    <span class="p">(</span> <span class="mf">0.5</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.75</span> <span class="p">),</span>
-    <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.75</span> <span class="p">),</span>
-    <span class="p">(</span><span class="o">-</span><span class="mf">0.75</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span> <span class="p">),</span>
-    <span class="p">(</span><span class="o">-</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.75</span> <span class="p">),</span>
-    <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span>  <span class="mf">0.3</span> <span class="p">),</span>
-    <span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.75</span> <span class="p">)</span>
-  <span class="p">]</span>
-<span class="n">GHOST_SIZE</span> <span class="o">=</span> <span class="mf">0.65</span>
-<span class="n">SCARED_COLOR</span> <span class="o">=</span> <span class="n">formatColor</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="n">GHOST_VEC_COLORS</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">colorToVector</span><span class="p">,</span> <span class="n">GHOST_COLORS</span><span class="p">)</span>
-
-<span class="n">PACMAN_COLOR</span> <span class="o">=</span> <span class="n">formatColor</span><span class="p">(</span><span class="mf">255.0</span><span class="o">/</span><span class="mf">255.0</span><span class="p">,</span><span class="mf">255.0</span><span class="o">/</span><span class="mf">255.0</span><span class="p">,</span><span class="mf">61.0</span><span class="o">/</span><span class="mi">255</span><span class="p">)</span>
-<span class="n">PACMAN_SCALE</span> <span class="o">=</span> <span class="mf">0.5</span>
-<span class="c">#pacman_speed = 0.25</span>
-
-<span class="c"># Food</span>
-<span class="n">FOOD_COLOR</span> <span class="o">=</span> <span class="n">formatColor</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">FOOD_SIZE</span> <span class="o">=</span> <span class="mf">0.1</span>
-
-<span class="c"># Laser</span>
-<span class="n">LASER_COLOR</span> <span class="o">=</span> <span class="n">formatColor</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">LASER_SIZE</span> <span class="o">=</span> <span class="mf">0.02</span>
-
-<span class="c"># Capsule graphics</span>
-<span class="n">CAPSULE_COLOR</span> <span class="o">=</span> <span class="n">formatColor</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">CAPSULE_SIZE</span> <span class="o">=</span> <span class="mf">0.25</span>
-
-<span class="c"># Drawing walls</span>
-<span class="n">WALL_RADIUS</span> <span class="o">=</span> <span class="mf">0.15</span>
-
-<span class="k">class</span> <span class="nc">InfoPane</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layout</span><span class="p">,</span> <span class="n">gridSize</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span> <span class="o">=</span> <span class="n">gridSize</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">width</span><span class="p">)</span> <span class="o">*</span> <span class="n">gridSize</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">=</span> <span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">height</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">gridSize</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">INFO_PANE_HEIGHT</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fontSize</span> <span class="o">=</span> <span class="mi">24</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="n">PACMAN_COLOR</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">drawPane</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">toScreen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">          Translates a point relative from the bottom left of the info pane.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">pos</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">pos</span>
-
-        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span> <span class="o">+</span> <span class="n">x</span> <span class="c"># Margin</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">+</span> <span class="n">y</span>
-        <span class="k">return</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span>
-
-    <span class="k">def</span> <span class="nf">drawPane</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scoreText</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">toScreen</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>  <span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">textColor</span><span class="p">,</span> <span class="s">&quot;SCORE:    0&quot;</span><span class="p">,</span> <span class="s">&quot;Times&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fontSize</span><span class="p">,</span> <span class="s">&quot;bold&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">initializeGhostDistances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distances</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ghostDistanceText</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="n">size</span> <span class="o">=</span> <span class="mi">20</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;</span> <span class="mi">240</span><span class="p">:</span>
-            <span class="n">size</span> <span class="o">=</span> <span class="mi">12</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;</span> <span class="mi">160</span><span class="p">:</span>
-            <span class="n">size</span> <span class="o">=</span> <span class="mi">10</span>
-
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">distances</span><span class="p">):</span>
-            <span class="n">t</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">toScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="o">/</span><span class="mi">8</span> <span class="o">*</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">GHOST_COLORS</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">d</span><span class="p">,</span> <span class="s">&quot;Times&quot;</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="s">&quot;bold&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ghostDistanceText</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">updateScore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">score</span><span class="p">):</span>
-        <span class="n">changeText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scoreText</span><span class="p">,</span> <span class="s">&quot;SCORE: </span><span class="si">% 4d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">score</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">setTeam</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isBlue</span><span class="p">):</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;RED TEAM&quot;</span>
-        <span class="k">if</span> <span class="n">isBlue</span><span class="p">:</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;BLUE TEAM&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">teamText</span> <span class="o">=</span> <span class="n">text</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">toScreen</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">0</span>  <span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">textColor</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="s">&quot;Times&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fontSize</span><span class="p">,</span> <span class="s">&quot;bold&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">updateGhostDistances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distances</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span>
-        <span class="k">if</span> <span class="s">&#39;ghostDistanceText&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">initializeGhostDistances</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">distances</span><span class="p">):</span>
-                <span class="n">changeText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ghostDistanceText</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">d</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">drawGhost</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-    <span class="k">def</span> <span class="nf">drawPacman</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-    <span class="k">def</span> <span class="nf">drawWarning</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-    <span class="k">def</span> <span class="nf">clearIcon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-    <span class="k">def</span> <span class="nf">updateMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-    <span class="k">def</span> <span class="nf">clearMessage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-
-<span class="k">class</span> <span class="nc">PacmanGraphics</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">frameTime</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">capture</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">have_window</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">currentGhostImages</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pacmanImage</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">zoom</span> <span class="o">=</span> <span class="n">zoom</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span> <span class="o">=</span> <span class="n">DEFAULT_GRID_SIZE</span> <span class="o">*</span> <span class="n">zoom</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">capture</span> <span class="o">=</span> <span class="n">capture</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">frameTime</span> <span class="o">=</span> <span class="n">frameTime</span>
-
-    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">isBlue</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">isBlue</span> <span class="o">=</span> <span class="n">isBlue</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">startGraphics</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-
-        <span class="c"># self.drawDistributions(state)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">distributionImages</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># Initialized lazily</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">drawStaticObjects</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">drawAgentObjects</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-
-        <span class="c"># Information</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">previousState</span> <span class="o">=</span> <span class="n">state</span>
-
-    <span class="k">def</span> <span class="nf">startGraphics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">layout</span>
-        <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">layout</span><span class="o">.</span><span class="n">width</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">layout</span><span class="o">.</span><span class="n">height</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">make_window</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">infoPane</span> <span class="o">=</span> <span class="n">InfoPane</span><span class="p">(</span><span class="n">layout</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">currentState</span> <span class="o">=</span> <span class="n">layout</span>
-
-    <span class="k">def</span> <span class="nf">drawDistributions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="n">walls</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">walls</span>
-        <span class="n">dist</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">walls</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
-            <span class="n">distx</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">dist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">distx</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">walls</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
-                <span class="p">(</span> <span class="n">screen_x</span><span class="p">,</span> <span class="n">screen_y</span> <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_screen</span><span class="p">(</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="p">)</span>
-                <span class="n">block</span> <span class="o">=</span> <span class="n">square</span><span class="p">(</span> <span class="p">(</span><span class="n">screen_x</span><span class="p">,</span> <span class="n">screen_y</span><span class="p">),</span>
-                                <span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="p">,</span>
-                                <span class="n">color</span> <span class="o">=</span> <span class="n">BACKGROUND_COLOR</span><span class="p">,</span>
-                                <span class="n">filled</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">behind</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-                <span class="n">distx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">distributionImages</span> <span class="o">=</span> <span class="n">dist</span>
-
-    <span class="k">def</span> <span class="nf">drawStaticObjects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">drawWalls</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">walls</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">food</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawFood</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">food</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">capsules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawCapsules</span><span class="p">(</span><span class="n">layout</span><span class="o">.</span><span class="n">capsules</span><span class="p">)</span>
-        <span class="n">refresh</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">drawAgentObjects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">agentImages</span> <span class="o">=</span> <span class="p">[]</span> <span class="c"># (agentState, image)</span>
-        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">agent</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">agentStates</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">agent</span><span class="o">.</span><span class="n">isPacman</span><span class="p">:</span>
-                <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawPacman</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">agentImages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawGhost</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">agentImages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span> <span class="p">)</span>
-        <span class="n">refresh</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">swapImages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agentIndex</span><span class="p">,</span> <span class="n">newState</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">          Changes an image from a ghost to a pacman or vis versa (for capture)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">prevState</span><span class="p">,</span> <span class="n">prevImage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agentImages</span><span class="p">[</span><span class="n">agentIndex</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">prevImage</span><span class="p">:</span> <span class="n">remove_from_screen</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">newState</span><span class="o">.</span><span class="n">isPacman</span><span class="p">:</span>
-            <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawPacman</span><span class="p">(</span><span class="n">newState</span><span class="p">,</span> <span class="n">agentIndex</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">agentImages</span><span class="p">[</span><span class="n">agentIndex</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">newState</span><span class="p">,</span> <span class="n">image</span> <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawGhost</span><span class="p">(</span><span class="n">newState</span><span class="p">,</span> <span class="n">agentIndex</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">agentImages</span><span class="p">[</span><span class="n">agentIndex</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">newState</span><span class="p">,</span> <span class="n">image</span> <span class="p">)</span>
-        <span class="n">refresh</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">newState</span><span class="p">):</span>
-        <span class="n">agentIndex</span> <span class="o">=</span> <span class="n">newState</span><span class="o">.</span><span class="n">_agentMoved</span>
-        <span class="n">agentState</span> <span class="o">=</span> <span class="n">newState</span><span class="o">.</span><span class="n">agentStates</span><span class="p">[</span><span class="n">agentIndex</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">agentImages</span><span class="p">[</span><span class="n">agentIndex</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isPacman</span> <span class="o">!=</span> <span class="n">agentState</span><span class="o">.</span><span class="n">isPacman</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">swapImages</span><span class="p">(</span><span class="n">agentIndex</span><span class="p">,</span> <span class="n">agentState</span><span class="p">)</span>
-        <span class="n">prevState</span><span class="p">,</span> <span class="n">prevImage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agentImages</span><span class="p">[</span><span class="n">agentIndex</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">agentState</span><span class="o">.</span><span class="n">isPacman</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">animatePacman</span><span class="p">(</span><span class="n">agentState</span><span class="p">,</span> <span class="n">prevState</span><span class="p">,</span> <span class="n">prevImage</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">moveGhost</span><span class="p">(</span><span class="n">agentState</span><span class="p">,</span> <span class="n">agentIndex</span><span class="p">,</span> <span class="n">prevState</span><span class="p">,</span> <span class="n">prevImage</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">agentImages</span><span class="p">[</span><span class="n">agentIndex</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">agentState</span><span class="p">,</span> <span class="n">prevImage</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">newState</span><span class="o">.</span><span class="n">_foodEaten</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">removeFood</span><span class="p">(</span><span class="n">newState</span><span class="o">.</span><span class="n">_foodEaten</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">food</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">newState</span><span class="o">.</span><span class="n">_capsuleEaten</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">removeCapsule</span><span class="p">(</span><span class="n">newState</span><span class="o">.</span><span class="n">_capsuleEaten</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">capsules</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">infoPane</span><span class="o">.</span><span class="n">updateScore</span><span class="p">(</span><span class="n">newState</span><span class="o">.</span><span class="n">score</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s">&#39;ghostDistances&#39;</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">newState</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">infoPane</span><span class="o">.</span><span class="n">updateGhostDistances</span><span class="p">(</span><span class="n">newState</span><span class="o">.</span><span class="n">ghostDistances</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">make_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
-        <span class="n">grid_width</span> <span class="o">=</span> <span class="p">(</span><span class="n">width</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span>
-        <span class="n">grid_height</span> <span class="o">=</span> <span class="p">(</span><span class="n">height</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span>
-        <span class="n">screen_width</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span> <span class="o">+</span> <span class="n">grid_width</span>
-        <span class="n">screen_height</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span> <span class="o">+</span> <span class="n">grid_height</span> <span class="o">+</span> <span class="n">INFO_PANE_HEIGHT</span>
-
-        <span class="n">begin_graphics</span><span class="p">(</span><span class="n">screen_width</span><span class="p">,</span>
-                       <span class="n">screen_height</span><span class="p">,</span>
-                       <span class="n">BACKGROUND_COLOR</span><span class="p">,</span>
-                       <span class="s">&quot;CSE511 Pacman&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">drawPacman</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pacman</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPosition</span><span class="p">(</span><span class="n">pacman</span><span class="p">)</span>
-        <span class="n">screen_point</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_screen</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
-        <span class="n">endpoints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getEndpoints</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getDirection</span><span class="p">(</span><span class="n">pacman</span><span class="p">))</span>
-
-        <span class="n">width</span> <span class="o">=</span> <span class="n">PACMAN_OUTLINE_WIDTH</span>
-        <span class="n">outlineColor</span> <span class="o">=</span> <span class="n">PACMAN_COLOR</span>
-        <span class="n">fillColor</span> <span class="o">=</span> <span class="n">PACMAN_COLOR</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">capture</span><span class="p">:</span>
-            <span class="n">outlineColor</span> <span class="o">=</span> <span class="n">TEAM_COLORS</span><span class="p">[</span><span class="n">index</span> <span class="o">%</span> <span class="mi">2</span><span class="p">]</span>
-            <span class="n">fillColor</span> <span class="o">=</span> <span class="n">GHOST_COLORS</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-            <span class="n">width</span> <span class="o">=</span> <span class="n">PACMAN_CAPTURE_OUTLINE_WIDTH</span>
-
-        <span class="k">return</span> <span class="p">[</span><span class="n">circle</span><span class="p">(</span><span class="n">screen_point</span><span class="p">,</span> <span class="n">PACMAN_SCALE</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="p">,</span>
-                       <span class="n">fillColor</span> <span class="o">=</span> <span class="n">fillColor</span><span class="p">,</span> <span class="n">outlineColor</span> <span class="o">=</span> <span class="n">outlineColor</span><span class="p">,</span>
-                       <span class="n">endpoints</span> <span class="o">=</span> <span class="n">endpoints</span><span class="p">,</span>
-                       <span class="n">width</span> <span class="o">=</span> <span class="n">width</span><span class="p">)]</span>
-
-    <span class="k">def</span> <span class="nf">getEndpoints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)):</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">position</span>
-        <span class="n">pos</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">y</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">width</span> <span class="o">=</span> <span class="mi">30</span> <span class="o">+</span> <span class="mi">80</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span> <span class="n">pos</span><span class="p">)</span>
-
-        <span class="n">delta</span> <span class="o">=</span> <span class="n">width</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">direction</span> <span class="o">==</span> <span class="s">&#39;West&#39;</span><span class="p">):</span>
-            <span class="n">endpoints</span> <span class="o">=</span> <span class="p">(</span><span class="mi">180</span><span class="o">+</span><span class="n">delta</span><span class="p">,</span> <span class="mi">180</span><span class="o">-</span><span class="n">delta</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="p">(</span><span class="n">direction</span> <span class="o">==</span> <span class="s">&#39;North&#39;</span><span class="p">):</span>
-            <span class="n">endpoints</span> <span class="o">=</span> <span class="p">(</span><span class="mi">90</span><span class="o">+</span><span class="n">delta</span><span class="p">,</span> <span class="mi">90</span><span class="o">-</span><span class="n">delta</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="p">(</span><span class="n">direction</span> <span class="o">==</span> <span class="s">&#39;South&#39;</span><span class="p">):</span>
-            <span class="n">endpoints</span> <span class="o">=</span> <span class="p">(</span><span class="mi">270</span><span class="o">+</span><span class="n">delta</span><span class="p">,</span> <span class="mi">270</span><span class="o">-</span><span class="n">delta</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">endpoints</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="o">+</span><span class="n">delta</span><span class="p">,</span> <span class="mi">0</span><span class="o">-</span><span class="n">delta</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">endpoints</span>
-
-    <span class="k">def</span> <span class="nf">movePacman</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
-        <span class="n">screenPosition</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_screen</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
-        <span class="n">endpoints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getEndpoints</span><span class="p">(</span> <span class="n">direction</span><span class="p">,</span> <span class="n">position</span> <span class="p">)</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">PACMAN_SCALE</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span>
-        <span class="n">moveCircle</span><span class="p">(</span><span class="n">image</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">screenPosition</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">endpoints</span><span class="p">)</span>
-        <span class="n">refresh</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">animatePacman</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pacman</span><span class="p">,</span> <span class="n">prevPacman</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">frameTime</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s">&#39;Press any key to step forward, &quot;q&quot; to play&#39;</span>
-            <span class="n">keys</span> <span class="o">=</span> <span class="n">wait_for_keys</span><span class="p">()</span>
-            <span class="k">if</span> <span class="s">&#39;q&#39;</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">frameTime</span> <span class="o">=</span> <span class="mf">0.1</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">frameTime</span> <span class="o">&gt;</span> <span class="mf">0.01</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">frameTime</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-            <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPosition</span><span class="p">(</span><span class="n">prevPacman</span><span class="p">)</span>
-            <span class="n">px</span><span class="p">,</span> <span class="n">py</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPosition</span><span class="p">(</span><span class="n">pacman</span><span class="p">)</span>
-            <span class="n">frames</span> <span class="o">=</span> <span class="mf">4.0</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-                <span class="n">pos</span> <span class="o">=</span> <span class="n">px</span><span class="o">*</span><span class="n">i</span><span class="o">/</span><span class="n">frames</span> <span class="o">+</span> <span class="n">fx</span><span class="o">*</span><span class="p">(</span><span class="n">frames</span><span class="o">-</span><span class="n">i</span><span class="p">)</span><span class="o">/</span><span class="n">frames</span><span class="p">,</span> <span class="n">py</span><span class="o">*</span><span class="n">i</span><span class="o">/</span><span class="n">frames</span> <span class="o">+</span> <span class="n">fy</span><span class="o">*</span><span class="p">(</span><span class="n">frames</span><span class="o">-</span><span class="n">i</span><span class="p">)</span><span class="o">/</span><span class="n">frames</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">movePacman</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDirection</span><span class="p">(</span><span class="n">pacman</span><span class="p">),</span> <span class="n">image</span><span class="p">)</span>
-                <span class="n">refresh</span><span class="p">()</span>
-                <span class="n">sleep</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frameTime</span><span class="p">)</span> <span class="o">/</span> <span class="n">frames</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">movePacman</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getPosition</span><span class="p">(</span><span class="n">pacman</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDirection</span><span class="p">(</span><span class="n">pacman</span><span class="p">),</span> <span class="n">image</span><span class="p">)</span>
-        <span class="n">refresh</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">getGhostColor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ghost</span><span class="p">,</span> <span class="n">ghostIndex</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">ghost</span><span class="o">.</span><span class="n">scaredTimer</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">SCARED_COLOR</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">GHOST_COLORS</span><span class="p">[</span><span class="n">ghostIndex</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">drawGhost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ghost</span><span class="p">,</span> <span class="n">agentIndex</span><span class="p">):</span>
-        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPosition</span><span class="p">(</span><span class="n">ghost</span><span class="p">)</span>
-        <span class="nb">dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDirection</span><span class="p">(</span><span class="n">ghost</span><span class="p">)</span>
-        <span class="p">(</span><span class="n">screen_x</span><span class="p">,</span> <span class="n">screen_y</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_screen</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="p">)</span>
-        <span class="n">coords</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">GHOST_SHAPE</span><span class="p">:</span>
-            <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span> <span class="o">+</span> <span class="n">screen_x</span><span class="p">,</span> <span class="n">y</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span> <span class="o">+</span> <span class="n">screen_y</span><span class="p">))</span>
-
-        <span class="n">colour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getGhostColor</span><span class="p">(</span><span class="n">ghost</span><span class="p">,</span> <span class="n">agentIndex</span><span class="p">)</span>
-        <span class="n">body</span> <span class="o">=</span> <span class="n">polygon</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">colour</span><span class="p">,</span> <span class="n">filled</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">WHITE</span> <span class="o">=</span> <span class="n">formatColor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-        <span class="n">BLACK</span> <span class="o">=</span> <span class="n">formatColor</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-
-        <span class="n">dx</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">dy</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="nb">dir</span> <span class="o">==</span> <span class="s">&#39;North&#39;</span><span class="p">:</span>
-            <span class="n">dy</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.2</span>
-        <span class="k">if</span> <span class="nb">dir</span> <span class="o">==</span> <span class="s">&#39;South&#39;</span><span class="p">:</span>
-            <span class="n">dy</span> <span class="o">=</span> <span class="mf">0.2</span>
-        <span class="k">if</span> <span class="nb">dir</span> <span class="o">==</span> <span class="s">&#39;East&#39;</span><span class="p">:</span>
-            <span class="n">dx</span> <span class="o">=</span> <span class="mf">0.2</span>
-        <span class="k">if</span> <span class="nb">dir</span> <span class="o">==</span> <span class="s">&#39;West&#39;</span><span class="p">:</span>
-            <span class="n">dx</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.2</span>
-        <span class="n">leftEye</span> <span class="o">=</span> <span class="n">circle</span><span class="p">((</span><span class="n">screen_x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="o">+</span><span class="n">dx</span><span class="o">/</span><span class="mf">1.5</span><span class="p">),</span> <span class="n">screen_y</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="p">(</span><span class="mf">0.3</span><span class="o">-</span><span class="n">dy</span><span class="o">/</span><span class="mf">1.5</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">WHITE</span><span class="p">,</span> <span class="n">WHITE</span><span class="p">)</span>
-        <span class="n">rightEye</span> <span class="o">=</span> <span class="n">circle</span><span class="p">((</span><span class="n">screen_x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="p">(</span><span class="mf">0.3</span><span class="o">+</span><span class="n">dx</span><span class="o">/</span><span class="mf">1.5</span><span class="p">),</span> <span class="n">screen_y</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="p">(</span><span class="mf">0.3</span><span class="o">-</span><span class="n">dy</span><span class="o">/</span><span class="mf">1.5</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">WHITE</span><span class="p">,</span> <span class="n">WHITE</span><span class="p">)</span>
-        <span class="n">leftPupil</span> <span class="o">=</span> <span class="n">circle</span><span class="p">((</span><span class="n">screen_x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="o">+</span><span class="n">dx</span><span class="p">),</span> <span class="n">screen_y</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="p">(</span><span class="mf">0.3</span><span class="o">-</span><span class="n">dy</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="mf">0.08</span><span class="p">,</span> <span class="n">BLACK</span><span class="p">,</span> <span class="n">BLACK</span><span class="p">)</span>
-        <span class="n">rightPupil</span> <span class="o">=</span> <span class="n">circle</span><span class="p">((</span><span class="n">screen_x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="p">(</span><span class="mf">0.3</span><span class="o">+</span><span class="n">dx</span><span class="p">),</span> <span class="n">screen_y</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="p">(</span><span class="mf">0.3</span><span class="o">-</span><span class="n">dy</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="mf">0.08</span><span class="p">,</span> <span class="n">BLACK</span><span class="p">,</span> <span class="n">BLACK</span><span class="p">)</span>
-        <span class="n">ghostImageParts</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">ghostImageParts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
-        <span class="n">ghostImageParts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">leftEye</span><span class="p">)</span>
-        <span class="n">ghostImageParts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rightEye</span><span class="p">)</span>
-        <span class="n">ghostImageParts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">leftPupil</span><span class="p">)</span>
-        <span class="n">ghostImageParts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rightPupil</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">ghostImageParts</span>
-
-    <span class="k">def</span> <span class="nf">moveEyes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">eyes</span><span class="p">):</span>
-        <span class="p">(</span><span class="n">screen_x</span><span class="p">,</span> <span class="n">screen_y</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_screen</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="p">)</span>
-        <span class="n">dx</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">dy</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="nb">dir</span> <span class="o">==</span> <span class="s">&#39;North&#39;</span><span class="p">:</span>
-            <span class="n">dy</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.2</span>
-        <span class="k">if</span> <span class="nb">dir</span> <span class="o">==</span> <span class="s">&#39;South&#39;</span><span class="p">:</span>
-            <span class="n">dy</span> <span class="o">=</span> <span class="mf">0.2</span>
-        <span class="k">if</span> <span class="nb">dir</span> <span class="o">==</span> <span class="s">&#39;East&#39;</span><span class="p">:</span>
-            <span class="n">dx</span> <span class="o">=</span> <span class="mf">0.2</span>
-        <span class="k">if</span> <span class="nb">dir</span> <span class="o">==</span> <span class="s">&#39;West&#39;</span><span class="p">:</span>
-            <span class="n">dx</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.2</span>
-        <span class="n">moveCircle</span><span class="p">(</span><span class="n">eyes</span><span class="p">[</span><span class="mi">0</span><span class="p">],(</span><span class="n">screen_x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="o">+</span><span class="n">dx</span><span class="o">/</span><span class="mf">1.5</span><span class="p">),</span> <span class="n">screen_y</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="p">(</span><span class="mf">0.3</span><span class="o">-</span><span class="n">dy</span><span class="o">/</span><span class="mf">1.5</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="mf">0.2</span><span class="p">)</span>
-        <span class="n">moveCircle</span><span class="p">(</span><span class="n">eyes</span><span class="p">[</span><span class="mi">1</span><span class="p">],(</span><span class="n">screen_x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="p">(</span><span class="mf">0.3</span><span class="o">+</span><span class="n">dx</span><span class="o">/</span><span class="mf">1.5</span><span class="p">),</span> <span class="n">screen_y</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="p">(</span><span class="mf">0.3</span><span class="o">-</span><span class="n">dy</span><span class="o">/</span><span class="mf">1.5</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="mf">0.2</span><span class="p">)</span>
-        <span class="n">moveCircle</span><span class="p">(</span><span class="n">eyes</span><span class="p">[</span><span class="mi">2</span><span class="p">],(</span><span class="n">screen_x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="o">+</span><span class="n">dx</span><span class="p">),</span> <span class="n">screen_y</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="p">(</span><span class="mf">0.3</span><span class="o">-</span><span class="n">dy</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="mf">0.08</span><span class="p">)</span>
-        <span class="n">moveCircle</span><span class="p">(</span><span class="n">eyes</span><span class="p">[</span><span class="mi">3</span><span class="p">],(</span><span class="n">screen_x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="p">(</span><span class="mf">0.3</span><span class="o">+</span><span class="n">dx</span><span class="p">),</span> <span class="n">screen_y</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="p">(</span><span class="mf">0.3</span><span class="o">-</span><span class="n">dy</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">GHOST_SIZE</span><span class="o">*</span><span class="mf">0.08</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">moveGhost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ghost</span><span class="p">,</span> <span class="n">ghostIndex</span><span class="p">,</span> <span class="n">prevGhost</span><span class="p">,</span> <span class="n">ghostImageParts</span><span class="p">):</span>
-        <span class="n">old_x</span><span class="p">,</span> <span class="n">old_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_screen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getPosition</span><span class="p">(</span><span class="n">prevGhost</span><span class="p">))</span>
-        <span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_screen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getPosition</span><span class="p">(</span><span class="n">ghost</span><span class="p">))</span>
-        <span class="n">delta</span> <span class="o">=</span> <span class="n">new_x</span> <span class="o">-</span> <span class="n">old_x</span><span class="p">,</span> <span class="n">new_y</span> <span class="o">-</span> <span class="n">old_y</span>
-
-        <span class="k">for</span> <span class="n">ghostImagePart</span> <span class="ow">in</span> <span class="n">ghostImageParts</span><span class="p">:</span>
-            <span class="n">move_by</span><span class="p">(</span><span class="n">ghostImagePart</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
-        <span class="n">refresh</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="n">ghost</span><span class="o">.</span><span class="n">scaredTimer</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">color</span> <span class="o">=</span> <span class="n">SCARED_COLOR</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">color</span> <span class="o">=</span> <span class="n">GHOST_COLORS</span><span class="p">[</span><span class="n">ghostIndex</span><span class="p">]</span>
-        <span class="n">edit</span><span class="p">(</span><span class="n">ghostImageParts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="s">&#39;fill&#39;</span><span class="p">,</span> <span class="n">color</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;outline&#39;</span><span class="p">,</span> <span class="n">color</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">moveEyes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getPosition</span><span class="p">(</span><span class="n">ghost</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDirection</span><span class="p">(</span><span class="n">ghost</span><span class="p">),</span> <span class="n">ghostImageParts</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:])</span>
-        <span class="n">refresh</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">getPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agentState</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">agentState</span><span class="o">.</span><span class="n">configuration</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span> <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">agentState</span><span class="o">.</span><span class="n">getPosition</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">getDirection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agentState</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">agentState</span><span class="o">.</span><span class="n">configuration</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span> <span class="k">return</span> <span class="n">Directions</span><span class="o">.</span><span class="n">STOP</span>
-        <span class="k">return</span> <span class="n">agentState</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">getDirection</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">finish</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">end_graphics</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">to_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
-        <span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="p">)</span> <span class="o">=</span> <span class="n">point</span>
-        <span class="c">#y = self.height - y</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span>  <span class="o">-</span> <span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span>
-        <span class="k">return</span> <span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="p">)</span>
-
-    <span class="c"># Fixes some TK issue with off-center circles</span>
-    <span class="k">def</span> <span class="nf">to_screen2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
-        <span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="p">)</span> <span class="o">=</span> <span class="n">point</span>
-        <span class="c">#y = self.height - y</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span>  <span class="o">-</span> <span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span>
-        <span class="k">return</span> <span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">drawWalls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wallMatrix</span><span class="p">):</span>
-        <span class="n">wallColor</span> <span class="o">=</span> <span class="n">WALL_COLOR</span>
-        <span class="k">for</span> <span class="n">xNum</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">wallMatrix</span><span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">capture</span> <span class="ow">and</span> <span class="p">(</span><span class="n">xNum</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">wallMatrix</span><span class="o">.</span><span class="n">width</span><span class="p">:</span> <span class="n">wallColor</span> <span class="o">=</span> <span class="n">TEAM_COLORS</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">capture</span> <span class="ow">and</span> <span class="p">(</span><span class="n">xNum</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">wallMatrix</span><span class="o">.</span><span class="n">width</span><span class="p">:</span> <span class="n">wallColor</span> <span class="o">=</span> <span class="n">TEAM_COLORS</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
-            <span class="k">for</span> <span class="n">yNum</span><span class="p">,</span> <span class="n">cell</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">cell</span><span class="p">:</span> <span class="c"># There&#39;s a wall here</span>
-                    <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">xNum</span><span class="p">,</span> <span class="n">yNum</span><span class="p">)</span>
-                    <span class="n">screen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_screen</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
-                    <span class="n">screen2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_screen2</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
-
-                    <span class="c"># draw each quadrant of the square based on adjacent walls</span>
-                    <span class="n">wIsWall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">isWall</span><span class="p">(</span><span class="n">xNum</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">yNum</span><span class="p">,</span> <span class="n">wallMatrix</span><span class="p">)</span>
-                    <span class="n">eIsWall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">isWall</span><span class="p">(</span><span class="n">xNum</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">yNum</span><span class="p">,</span> <span class="n">wallMatrix</span><span class="p">)</span>
-                    <span class="n">nIsWall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">isWall</span><span class="p">(</span><span class="n">xNum</span><span class="p">,</span> <span class="n">yNum</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">wallMatrix</span><span class="p">)</span>
-                    <span class="n">sIsWall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">isWall</span><span class="p">(</span><span class="n">xNum</span><span class="p">,</span> <span class="n">yNum</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">wallMatrix</span><span class="p">)</span>
-                    <span class="n">nwIsWall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">isWall</span><span class="p">(</span><span class="n">xNum</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">yNum</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">wallMatrix</span><span class="p">)</span>
-                    <span class="n">swIsWall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">isWall</span><span class="p">(</span><span class="n">xNum</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">yNum</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">wallMatrix</span><span class="p">)</span>
-                    <span class="n">neIsWall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">isWall</span><span class="p">(</span><span class="n">xNum</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">yNum</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">wallMatrix</span><span class="p">)</span>
-                    <span class="n">seIsWall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">isWall</span><span class="p">(</span><span class="n">xNum</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">yNum</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">wallMatrix</span><span class="p">)</span>
-
-                    <span class="c"># NE quadrant</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">nIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">eIsWall</span><span class="p">):</span>
-                        <span class="c"># inner circle</span>
-                        <span class="n">circle</span><span class="p">(</span><span class="n">screen2</span><span class="p">,</span> <span class="n">WALL_RADIUS</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="p">,</span> <span class="n">wallColor</span><span class="p">,</span> <span class="n">wallColor</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">91</span><span class="p">),</span> <span class="s">&#39;arc&#39;</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">nIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">eIsWall</span><span class="p">):</span>
-                        <span class="c"># vertical line</span>
-                        <span class="n">line</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span> <span class="n">wallColor</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">nIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">eIsWall</span><span class="p">):</span>
-                        <span class="c"># horizontal line</span>
-                        <span class="n">line</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="mf">0.5</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">wallColor</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">nIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">eIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">neIsWall</span><span class="p">):</span>
-                        <span class="c"># outer circle</span>
-                        <span class="n">circle</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen2</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">WALL_RADIUS</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">wallColor</span><span class="p">,</span> <span class="n">wallColor</span><span class="p">,</span> <span class="p">(</span><span class="mi">180</span><span class="p">,</span><span class="mi">271</span><span class="p">),</span> <span class="s">&#39;arc&#39;</span><span class="p">)</span>
-                        <span class="n">line</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="mf">0.5</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">wallColor</span><span class="p">)</span>
-                        <span class="n">line</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="o">+</span><span class="mi">1</span><span class="p">)),</span> <span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">))),</span> <span class="n">wallColor</span><span class="p">)</span>
-
-                    <span class="c"># NW quadrant</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">nIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">wIsWall</span><span class="p">):</span>
-                        <span class="c"># inner circle</span>
-                        <span class="n">circle</span><span class="p">(</span><span class="n">screen2</span><span class="p">,</span> <span class="n">WALL_RADIUS</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="p">,</span> <span class="n">wallColor</span><span class="p">,</span> <span class="n">wallColor</span><span class="p">,</span> <span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">181</span><span class="p">),</span> <span class="s">&#39;arc&#39;</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">nIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">wIsWall</span><span class="p">):</span>
-                        <span class="c"># vertical line</span>
-                        <span class="n">line</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span> <span class="n">wallColor</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">nIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">wIsWall</span><span class="p">):</span>
-                        <span class="c"># horizontal line</span>
-                        <span class="n">line</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">wallColor</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">nIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">wIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">nwIsWall</span><span class="p">):</span>
-                        <span class="c"># outer circle</span>
-                        <span class="n">circle</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen2</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">WALL_RADIUS</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">wallColor</span><span class="p">,</span> <span class="n">wallColor</span><span class="p">,</span> <span class="p">(</span><span class="mi">270</span><span class="p">,</span><span class="mi">361</span><span class="p">),</span> <span class="s">&#39;arc&#39;</span><span class="p">)</span>
-                        <span class="n">line</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">wallColor</span><span class="p">)</span>
-                        <span class="n">line</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="o">+</span><span class="mi">1</span><span class="p">)),</span> <span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">))),</span> <span class="n">wallColor</span><span class="p">)</span>
-
-                    <span class="c"># SE quadrant</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">sIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">eIsWall</span><span class="p">):</span>
-                        <span class="c"># inner circle</span>
-                        <span class="n">circle</span><span class="p">(</span><span class="n">screen2</span><span class="p">,</span> <span class="n">WALL_RADIUS</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="p">,</span> <span class="n">wallColor</span><span class="p">,</span> <span class="n">wallColor</span><span class="p">,</span> <span class="p">(</span><span class="mi">270</span><span class="p">,</span><span class="mi">361</span><span class="p">),</span> <span class="s">&#39;arc&#39;</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">sIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">eIsWall</span><span class="p">):</span>
-                        <span class="c"># vertical line</span>
-                        <span class="n">line</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)),</span> <span class="n">wallColor</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">sIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">eIsWall</span><span class="p">):</span>
-                        <span class="c"># horizontal line</span>
-                        <span class="n">line</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="mf">0.5</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">wallColor</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">sIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">eIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">seIsWall</span><span class="p">):</span>
-                        <span class="c"># outer circle</span>
-                        <span class="n">circle</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen2</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">WALL_RADIUS</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">wallColor</span><span class="p">,</span> <span class="n">wallColor</span><span class="p">,</span> <span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">181</span><span class="p">),</span> <span class="s">&#39;arc&#39;</span><span class="p">)</span>
-                        <span class="n">line</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="mf">0.5</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">wallColor</span><span class="p">)</span>
-                        <span class="n">line</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span> <span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))),</span> <span class="n">wallColor</span><span class="p">)</span>
-
-                    <span class="c"># SW quadrant</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">sIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">wIsWall</span><span class="p">):</span>
-                        <span class="c"># inner circle</span>
-                        <span class="n">circle</span><span class="p">(</span><span class="n">screen2</span><span class="p">,</span> <span class="n">WALL_RADIUS</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="p">,</span> <span class="n">wallColor</span><span class="p">,</span> <span class="n">wallColor</span><span class="p">,</span> <span class="p">(</span><span class="mi">180</span><span class="p">,</span><span class="mi">271</span><span class="p">),</span> <span class="s">&#39;arc&#39;</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">sIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">wIsWall</span><span class="p">):</span>
-                        <span class="c"># vertical line</span>
-                        <span class="n">line</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)),</span> <span class="n">wallColor</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">sIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">wIsWall</span><span class="p">):</span>
-                        <span class="c"># horizontal line</span>
-                        <span class="n">line</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">wallColor</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">sIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">wIsWall</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">swIsWall</span><span class="p">):</span>
-                        <span class="c"># outer circle</span>
-                        <span class="n">circle</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen2</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">WALL_RADIUS</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">wallColor</span><span class="p">,</span> <span class="n">wallColor</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">91</span><span class="p">),</span> <span class="s">&#39;arc&#39;</span><span class="p">)</span>
-                        <span class="n">line</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">)),</span> <span class="n">wallColor</span><span class="p">)</span>
-                        <span class="n">line</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span> <span class="n">add</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">WALL_RADIUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="o">*</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))),</span> <span class="n">wallColor</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">isWall</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">walls</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
-        <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="n">walls</span><span class="o">.</span><span class="n">width</span> <span class="ow">or</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="n">walls</span><span class="o">.</span><span class="n">height</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
-        <span class="k">return</span> <span class="n">walls</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">drawFood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foodMatrix</span> <span class="p">):</span>
-        <span class="n">foodImages</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">color</span> <span class="o">=</span> <span class="n">FOOD_COLOR</span>
-        <span class="k">for</span> <span class="n">xNum</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">foodMatrix</span><span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">capture</span> <span class="ow">and</span> <span class="p">(</span><span class="n">xNum</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">foodMatrix</span><span class="o">.</span><span class="n">width</span><span class="p">:</span> <span class="n">color</span> <span class="o">=</span> <span class="n">TEAM_COLORS</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">capture</span> <span class="ow">and</span> <span class="p">(</span><span class="n">xNum</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">foodMatrix</span><span class="o">.</span><span class="n">width</span><span class="p">:</span> <span class="n">color</span> <span class="o">=</span> <span class="n">TEAM_COLORS</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">imageRow</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">foodImages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">imageRow</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">yNum</span><span class="p">,</span> <span class="n">cell</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">cell</span><span class="p">:</span> <span class="c"># There&#39;s food here</span>
-                    <span class="n">screen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_screen</span><span class="p">((</span><span class="n">xNum</span><span class="p">,</span> <span class="n">yNum</span> <span class="p">))</span>
-                    <span class="n">dot</span> <span class="o">=</span> <span class="n">circle</span><span class="p">(</span> <span class="n">screen</span><span class="p">,</span>
-                                  <span class="n">FOOD_SIZE</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="p">,</span>
-                                  <span class="n">outlineColor</span> <span class="o">=</span> <span class="n">color</span><span class="p">,</span> <span class="n">fillColor</span> <span class="o">=</span> <span class="n">color</span><span class="p">,</span>
-                                  <span class="n">width</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-                    <span class="n">imageRow</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dot</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">imageRow</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">foodImages</span>
-
-    <span class="k">def</span> <span class="nf">drawCapsules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capsules</span> <span class="p">):</span>
-        <span class="n">capsuleImages</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">capsule</span> <span class="ow">in</span> <span class="n">capsules</span><span class="p">:</span>
-            <span class="p">(</span> <span class="n">screen_x</span><span class="p">,</span> <span class="n">screen_y</span> <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_screen</span><span class="p">(</span><span class="n">capsule</span><span class="p">)</span>
-            <span class="n">dot</span> <span class="o">=</span> <span class="n">circle</span><span class="p">(</span> <span class="p">(</span><span class="n">screen_x</span><span class="p">,</span> <span class="n">screen_y</span><span class="p">),</span>
-                              <span class="n">CAPSULE_SIZE</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="p">,</span>
-                              <span class="n">outlineColor</span> <span class="o">=</span> <span class="n">CAPSULE_COLOR</span><span class="p">,</span>
-                              <span class="n">fillColor</span> <span class="o">=</span> <span class="n">CAPSULE_COLOR</span><span class="p">,</span>
-                              <span class="n">width</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="n">capsuleImages</span><span class="p">[</span><span class="n">capsule</span><span class="p">]</span> <span class="o">=</span> <span class="n">dot</span>
-        <span class="k">return</span> <span class="n">capsuleImages</span>
-
-    <span class="k">def</span> <span class="nf">removeFood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">foodImages</span> <span class="p">):</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">cell</span>
-        <span class="n">remove_from_screen</span><span class="p">(</span><span class="n">foodImages</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">])</span>
-
-    <span class="k">def</span> <span class="nf">removeCapsule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">capsuleImages</span> <span class="p">):</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">cell</span>
-        <span class="n">remove_from_screen</span><span class="p">(</span><span class="n">capsuleImages</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)])</span>
-
-    <span class="k">def</span> <span class="nf">drawExpandedCells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cells</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Draws an overlay of expanded grid positions for search agents</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cells</span><span class="p">))</span>
-        <span class="n">baseColor</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">clearExpandedCells</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">expandedCells</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">cell</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cells</span><span class="p">):</span>
-            <span class="n">screenPos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_screen</span><span class="p">(</span> <span class="n">cell</span><span class="p">)</span>
-            <span class="n">cellColor</span> <span class="o">=</span> <span class="n">formatColor</span><span class="p">(</span><span class="o">*</span><span class="p">[(</span><span class="n">n</span><span class="o">-</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">c</span> <span class="o">*</span> <span class="o">.</span><span class="mi">5</span> <span class="o">/</span> <span class="n">n</span> <span class="o">+</span> <span class="o">.</span><span class="mi">25</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">baseColor</span><span class="p">])</span>
-            <span class="n">block</span> <span class="o">=</span> <span class="n">square</span><span class="p">(</span><span class="n">screenPos</span><span class="p">,</span>
-                     <span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridSize</span><span class="p">,</span>
-                     <span class="n">color</span> <span class="o">=</span> <span class="n">cellColor</span><span class="p">,</span>
-                     <span class="n">filled</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">behind</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">expandedCells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">frameTime</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">refresh</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">clearExpandedCells</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="s">&#39;expandedCells&#39;</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expandedCells</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">expandedCells</span><span class="p">:</span>
-                <span class="n">remove_from_screen</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
-
-
-    <span class="k">def</span> <span class="nf">updateDistributions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distributions</span><span class="p">):</span>
-        <span class="s">&quot;Draws an agent&#39;s belief distributions&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distributionImages</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">drawDistributions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">previousState</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distributionImages</span><span class="p">)):</span>
-            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distributionImages</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
-                <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distributionImages</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span>
-                <span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="n">dist</span><span class="p">[</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="p">]</span> <span class="k">for</span> <span class="n">dist</span> <span class="ow">in</span> <span class="n">distributions</span><span class="p">]</span>
-
-                <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">pass</span>
-                <span class="c"># Fog of war</span>
-                <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]</span>
-                <span class="n">colors</span> <span class="o">=</span> <span class="n">GHOST_VEC_COLORS</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="c"># With Pacman</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">capture</span><span class="p">:</span> <span class="n">colors</span> <span class="o">=</span> <span class="n">GHOST_VEC_COLORS</span>
-                <span class="k">for</span> <span class="n">weight</span><span class="p">,</span> <span class="n">gcolor</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">colors</span><span class="p">):</span>
-                    <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">c</span> <span class="o">+</span> <span class="mf">0.95</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="n">weight</span> <span class="o">**</span> <span class="o">.</span><span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span><span class="n">g</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">gcolor</span><span class="p">)]</span>
-                <span class="n">changeColor</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">formatColor</span><span class="p">(</span><span class="o">*</span><span class="n">color</span><span class="p">))</span>
-        <span class="n">refresh</span><span class="p">()</span>
-
-<span class="k">class</span> <span class="nc">FirstPersonPacmanGraphics</span><span class="p">(</span><span class="n">PacmanGraphics</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zoom</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">showGhosts</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">capture</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="n">frameTime</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="n">PacmanGraphics</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zoom</span><span class="p">,</span> <span class="n">frameTime</span><span class="o">=</span><span class="n">frameTime</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">showGhosts</span> <span class="o">=</span> <span class="n">showGhosts</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">capture</span> <span class="o">=</span> <span class="n">capture</span>
-
-    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">isBlue</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">isBlue</span> <span class="o">=</span> <span class="n">isBlue</span>
-        <span class="n">PacmanGraphics</span><span class="o">.</span><span class="n">startGraphics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
-        <span class="c"># Initialize distribution images</span>
-        <span class="n">walls</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">walls</span>
-        <span class="n">dist</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">layout</span>
-
-        <span class="c"># Draw the rest</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">distributionImages</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># initialize lazily</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">drawStaticObjects</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">drawAgentObjects</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-
-        <span class="c"># Information</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">previousState</span> <span class="o">=</span> <span class="n">state</span>
-
-    <span class="k">def</span> <span class="nf">lookAhead</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">getDirection</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;Stop&#39;</span><span class="p">:</span>
-            <span class="k">return</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">pass</span>
-            <span class="c"># Draw relevant ghosts</span>
-            <span class="n">allGhosts</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">getGhostStates</span><span class="p">()</span>
-            <span class="n">visibleGhosts</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">getVisibleGhosts</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ghost</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">allGhosts</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">ghost</span> <span class="ow">in</span> <span class="n">visibleGhosts</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">drawGhost</span><span class="p">(</span><span class="n">ghost</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">currentGhostImages</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
-
-    <span class="k">def</span> <span class="nf">getGhostColor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ghost</span><span class="p">,</span> <span class="n">ghostIndex</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">GHOST_COLORS</span><span class="p">[</span><span class="n">ghostIndex</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">getPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ghostState</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">showGhosts</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ghostState</span><span class="o">.</span><span class="n">isPacman</span> <span class="ow">and</span> <span class="n">ghostState</span><span class="o">.</span><span class="n">getPosition</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">PacmanGraphics</span><span class="o">.</span><span class="n">getPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ghostState</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-
-
-<span class="c"># Saving graphical output</span>
-<span class="c"># -----------------------</span>
-<span class="c"># Note: to make an animated gif from this postscript output, try the command:</span>
-<span class="c"># convert -delay 7 -loop 1 -compress lzw -layers optimize frame* out.gif</span>
-<span class="c"># convert is part of imagemagick (freeware)</span>
-
-<span class="n">SAVE_POSTSCRIPT</span> <span class="o">=</span> <span class="bp">False</span>
-<span class="n">POSTSCRIPT_OUTPUT_DIR</span> <span class="o">=</span> <span class="s">&#39;frames&#39;</span>
-<span class="n">FRAME_NUMBER</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="kn">import</span> <span class="nn">os</span>
-
-<span class="k">def</span> <span class="nf">saveFrame</span><span class="p">():</span>
-    <span class="s">&quot;Saves the current graphical output as a postscript file&quot;</span>
-    <span class="k">global</span> <span class="n">SAVE_POSTSCRIPT</span><span class="p">,</span> <span class="n">FRAME_NUMBER</span><span class="p">,</span> <span class="n">POSTSCRIPT_OUTPUT_DIR</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">SAVE_POSTSCRIPT</span><span class="p">:</span> <span class="k">return</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">POSTSCRIPT_OUTPUT_DIR</span><span class="p">):</span> <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">POSTSCRIPT_OUTPUT_DIR</span><span class="p">)</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">POSTSCRIPT_OUTPUT_DIR</span><span class="p">,</span> <span class="s">&#39;frame_</span><span class="si">%08d</span><span class="s">.ps&#39;</span> <span class="o">%</span> <span class="n">FRAME_NUMBER</span><span class="p">)</span>
-    <span class="n">FRAME_NUMBER</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="n">writePostscript</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="c"># writes the current canvas</span>
-</pre></div>
-</body>
-</html>
+# graphicsDisplay.py
+# ------------------
+# Licensing Information: Please do not distribute or publish solutions to this
+# project. You are free to use and extend these projects for educational
+# purposes. The Pacman AI projects were developed at UC Berkeley, primarily by
+# John DeNero (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
+# For more info, see http://inst.eecs.berkeley.edu/~cs188/sp09/pacman.html
+
+from graphicsUtils import *
+import math, time
+from game import Directions
+
+###########################
+#  GRAPHICS DISPLAY CODE  #
+###########################
+
+# Most code by Dan Klein and John Denero written or rewritten for cs188, UC Berkeley.
+# Some code from a Pacman implementation by LiveWires, and used / modified with permission.
+
+DEFAULT_GRID_SIZE = 30.0
+INFO_PANE_HEIGHT = 35
+BACKGROUND_COLOR = formatColor(0,0,0)
+WALL_COLOR = formatColor(0.0/255.0, 51.0/255.0, 255.0/255.0)
+INFO_PANE_COLOR = formatColor(.4,.4,0)
+SCORE_COLOR = formatColor(.9, .9, .9)
+PACMAN_OUTLINE_WIDTH = 2
+PACMAN_CAPTURE_OUTLINE_WIDTH = 4
+
+GHOST_COLORS = []
+GHOST_COLORS.append(formatColor(.9,0,0)) # Red
+GHOST_COLORS.append(formatColor(0,.3,.9)) # Blue
+GHOST_COLORS.append(formatColor(.98,.41,.07)) # Orange
+GHOST_COLORS.append(formatColor(.1,.75,.7)) # Green
+GHOST_COLORS.append(formatColor(1.0,0.6,0.0)) # Yellow
+GHOST_COLORS.append(formatColor(.4,0.13,0.91)) # Purple
+
+TEAM_COLORS = GHOST_COLORS[:2]
+
+GHOST_SHAPE = [
+    ( 0,    0.3 ),
+    ( 0.25, 0.75 ),
+    ( 0.5,  0.3 ),
+    ( 0.75, 0.75 ),
+    ( 0.75, -0.5 ),
+    ( 0.5,  -0.75 ),
+    (-0.5,  -0.75 ),
+    (-0.75, -0.5 ),
+    (-0.75, 0.75 ),
+    (-0.5,  0.3 ),
+    (-0.25, 0.75 )
+  ]
+GHOST_SIZE = 0.65
+SCARED_COLOR = formatColor(1,1,1)
+
+GHOST_VEC_COLORS = map(colorToVector, GHOST_COLORS)
+
+PACMAN_COLOR = formatColor(255.0/255.0,255.0/255.0,61.0/255)
+PACMAN_SCALE = 0.5
+#pacman_speed = 0.25
+
+# Food
+FOOD_COLOR = formatColor(1,1,1)
+FOOD_SIZE = 0.1
+
+# Laser
+LASER_COLOR = formatColor(1,0,0)
+LASER_SIZE = 0.02
+
+# Capsule graphics
+CAPSULE_COLOR = formatColor(1,1,1)
+CAPSULE_SIZE = 0.25
+
+# Drawing walls
+WALL_RADIUS = 0.15
+
+class InfoPane:
+    def __init__(self, layout, gridSize):
+        self.gridSize = gridSize
+        self.width = (layout.width) * gridSize
+        self.base = (layout.height + 1) * gridSize
+        self.height = INFO_PANE_HEIGHT
+        self.fontSize = 24
+        self.textColor = PACMAN_COLOR
+        self.drawPane()
+
+    def toScreen(self, pos, y = None):
+        """
+          Translates a point relative from the bottom left of the info pane.
+        """
+        if y == None:
+            x,y = pos
+        else:
+            x = pos
+
+        x = self.gridSize + x # Margin
+        y = self.base + y
+        return x,y
+
+    def drawPane(self):
+        self.scoreText = text( self.toScreen(0, 0  ), self.textColor, "SCORE:    0", "Times", self.fontSize, "bold")
+
+    def initializeGhostDistances(self, distances):
+        self.ghostDistanceText = []
+
+        size = 20
+        if self.width < 240:
+            size = 12
+        if self.width < 160:
+            size = 10
+
+        for i, d in enumerate(distances):
+            t = text( self.toScreen(self.width/2 + self.width/8 * i, 0), GHOST_COLORS[i+1], d, "Times", size, "bold")
+            self.ghostDistanceText.append(t)
+
+    def updateScore(self, score):
+        changeText(self.scoreText, "SCORE: % 4d" % score)
+
+    def setTeam(self, isBlue):
+        text = "RED TEAM"
+        if isBlue: text = "BLUE TEAM"
+        self.teamText = text( self.toScreen(300, 0  ), self.textColor, text, "Times", self.fontSize, "bold")
+
+    def updateGhostDistances(self, distances):
+        if len(distances) == 0: return
+        if 'ghostDistanceText' not in dir(self): self.initializeGhostDistances(distances)
+        else:
+            for i, d in enumerate(distances):
+                changeText(self.ghostDistanceText[i], d)
+
+    def drawGhost(self):
+        pass
+
+    def drawPacman(self):
+        pass
+
+    def drawWarning(self):
+        pass
+
+    def clearIcon(self):
+        pass
+
+    def updateMessage(self, message):
+        pass
+
+    def clearMessage(self):
+        pass
+
+
+class PacmanGraphics:
+    def __init__(self, zoom=1.0, frameTime=0.0, capture=False):
+        self.have_window = 0
+        self.currentGhostImages = {}
+        self.pacmanImage = None
+        self.zoom = zoom
+        self.gridSize = DEFAULT_GRID_SIZE * zoom
+        self.capture = capture
+        self.frameTime = frameTime
+
+    def initialize(self, state, isBlue = False):
+        self.isBlue = isBlue
+        self.startGraphics(state)
+
+        # self.drawDistributions(state)
+        self.distributionImages = None  # Initialized lazily
+        self.drawStaticObjects(state)
+        self.drawAgentObjects(state)
+
+        # Information
+        self.previousState = state
+
+    def startGraphics(self, state):
+        self.layout = state.layout
+        layout = self.layout
+        self.width = layout.width
+        self.height = layout.height
+        self.make_window(self.width, self.height)
+        self.infoPane = InfoPane(layout, self.gridSize)
+        self.currentState = layout
+
+    def drawDistributions(self, state):
+        walls = state.layout.walls
+        dist = []
+        for x in range(walls.width):
+            distx = []
+            dist.append(distx)
+            for y in range(walls.height):
+                ( screen_x, screen_y ) = self.to_screen( (x, y) )
+                block = square( (screen_x, screen_y),
+                                0.5 * self.gridSize,
+                                color = BACKGROUND_COLOR,
+                                filled = 1, behind=2)
+                distx.append(block)
+        self.distributionImages = dist
+
+    def drawStaticObjects(self, state):
+        layout = self.layout
+        self.drawWalls(layout.walls)
+        self.food = self.drawFood(layout.food)
+        self.capsules = self.drawCapsules(layout.capsules)
+        refresh()
+
+    def drawAgentObjects(self, state):
+        self.agentImages = [] # (agentState, image)
+        for index, agent in enumerate(state.agentStates):
+            if agent.isPacman:
+                image = self.drawPacman(agent, index)
+                self.agentImages.append( (agent, image) )
+            else:
+                image = self.drawGhost(agent, index)
+                self.agentImages.append( (agent, image) )
+        refresh()
+
+    def swapImages(self, agentIndex, newState):
+        """
+          Changes an image from a ghost to a pacman or vis versa (for capture)
+        """
+        prevState, prevImage = self.agentImages[agentIndex]
+        for item in prevImage: remove_from_screen(item)
+        if newState.isPacman:
+            image = self.drawPacman(newState, agentIndex)
+            self.agentImages[agentIndex] = (newState, image )
+        else:
+            image = self.drawGhost(newState, agentIndex)
+            self.agentImages[agentIndex] = (newState, image )
+        refresh()
+
+    def update(self, newState):
+        agentIndex = newState._agentMoved
+        agentState = newState.agentStates[agentIndex]
+
+        if self.agentImages[agentIndex][0].isPacman != agentState.isPacman: self.swapImages(agentIndex, agentState)
+        prevState, prevImage = self.agentImages[agentIndex]
+        if agentState.isPacman:
+            self.animatePacman(agentState, prevState, prevImage)
+        else:
+            self.moveGhost(agentState, agentIndex, prevState, prevImage)
+        self.agentImages[agentIndex] = (agentState, prevImage)
+
+        if newState._foodEaten != None:
+            self.removeFood(newState._foodEaten, self.food)
+        if newState._capsuleEaten != None:
+            self.removeCapsule(newState._capsuleEaten, self.capsules)
+        self.infoPane.updateScore(newState.score)
+        if 'ghostDistances' in dir(newState):
+            self.infoPane.updateGhostDistances(newState.ghostDistances)
+
+    def make_window(self, width, height):
+        grid_width = (width-1) * self.gridSize
+        grid_height = (height-1) * self.gridSize
+        screen_width = 2*self.gridSize + grid_width
+        screen_height = 2*self.gridSize + grid_height + INFO_PANE_HEIGHT
+
+        begin_graphics(screen_width,
+                       screen_height,
+                       BACKGROUND_COLOR,
+                       "CSE511 Pacman")
+
+    def drawPacman(self, pacman, index):
+        position = self.getPosition(pacman)
+        screen_point = self.to_screen(position)
+        endpoints = self.getEndpoints(self.getDirection(pacman))
+
+        width = PACMAN_OUTLINE_WIDTH
+        outlineColor = PACMAN_COLOR
+        fillColor = PACMAN_COLOR
+
+        if self.capture:
+            outlineColor = TEAM_COLORS[index % 2]
+            fillColor = GHOST_COLORS[index]
+            width = PACMAN_CAPTURE_OUTLINE_WIDTH
+
+        return [circle(screen_point, PACMAN_SCALE * self.gridSize,
+                       fillColor = fillColor, outlineColor = outlineColor,
+                       endpoints = endpoints,
+                       width = width)]
+
+    def getEndpoints(self, direction, position=(0,0)):
+        x, y = position
+        pos = x - int(x) + y - int(y)
+        width = 30 + 80 * math.sin(math.pi* pos)
+
+        delta = width / 2
+        if (direction == 'West'):
+            endpoints = (180+delta, 180-delta)
+        elif (direction == 'North'):
+            endpoints = (90+delta, 90-delta)
+        elif (direction == 'South'):
+            endpoints = (270+delta, 270-delta)
+        else:
+            endpoints = (0+delta, 0-delta)
+        return endpoints
+
+    def movePacman(self, position, direction, image):
+        screenPosition = self.to_screen(position)
+        endpoints = self.getEndpoints( direction, position )
+        r = PACMAN_SCALE * self.gridSize
+        moveCircle(image[0], screenPosition, r, endpoints)
+        refresh()
+
+    def animatePacman(self, pacman, prevPacman, image):
+        if self.frameTime < 0:
+            print ('Press any key to step forward, "q" to play')
+            keys = wait_for_keys()
+            if 'q' in keys:
+                self.frameTime = 0.1
+        if self.frameTime > 0.01 or self.frameTime < 0:
+            start = time.time()
+            fx, fy = self.getPosition(prevPacman)
+            px, py = self.getPosition(pacman)
+            frames = 4.0
+            for i in range(1,int(frames) + 1):
+                pos = px*i/frames + fx*(frames-i)/frames, py*i/frames + fy*(frames-i)/frames
+                self.movePacman(pos, self.getDirection(pacman), image)
+                refresh()
+                sleep(abs(self.frameTime) / frames)
+        else:
+            self.movePacman(self.getPosition(pacman), self.getDirection(pacman), image)
+        refresh()
+
+    def getGhostColor(self, ghost, ghostIndex):
+        if ghost.scaredTimer > 0:
+            return SCARED_COLOR
+        else:
+            return GHOST_COLORS[ghostIndex]
+
+    def drawGhost(self, ghost, agentIndex):
+        pos = self.getPosition(ghost)
+        dir = self.getDirection(ghost)
+        (screen_x, screen_y) = (self.to_screen(pos) )
+        coords = []
+        for (x, y) in GHOST_SHAPE:
+            coords.append((x*self.gridSize*GHOST_SIZE + screen_x, y*self.gridSize*GHOST_SIZE + screen_y))
+
+        colour = self.getGhostColor(ghost, agentIndex)
+        body = polygon(coords, colour, filled = 1)
+        WHITE = formatColor(1.0, 1.0, 1.0)
+        BLACK = formatColor(0.0, 0.0, 0.0)
+
+        dx = 0
+        dy = 0
+        if dir == 'North':
+            dy = -0.2
+        if dir == 'South':
+            dy = 0.2
+        if dir == 'East':
+            dx = 0.2
+        if dir == 'West':
+            dx = -0.2
+        leftEye = circle((screen_x+self.gridSize*GHOST_SIZE*(-0.3+dx/1.5), screen_y-self.gridSize*GHOST_SIZE*(0.3-dy/1.5)), self.gridSize*GHOST_SIZE*0.2, WHITE, WHITE)
+        rightEye = circle((screen_x+self.gridSize*GHOST_SIZE*(0.3+dx/1.5), screen_y-self.gridSize*GHOST_SIZE*(0.3-dy/1.5)), self.gridSize*GHOST_SIZE*0.2, WHITE, WHITE)
+        leftPupil = circle((screen_x+self.gridSize*GHOST_SIZE*(-0.3+dx), screen_y-self.gridSize*GHOST_SIZE*(0.3-dy)), self.gridSize*GHOST_SIZE*0.08, BLACK, BLACK)
+        rightPupil = circle((screen_x+self.gridSize*GHOST_SIZE*(0.3+dx), screen_y-self.gridSize*GHOST_SIZE*(0.3-dy)), self.gridSize*GHOST_SIZE*0.08, BLACK, BLACK)
+        ghostImageParts = []
+        ghostImageParts.append(body)
+        ghostImageParts.append(leftEye)
+        ghostImageParts.append(rightEye)
+        ghostImageParts.append(leftPupil)
+        ghostImageParts.append(rightPupil)
+
+        return ghostImageParts
+
+    def moveEyes(self, pos, dir, eyes):
+        (screen_x, screen_y) = (self.to_screen(pos) )
+        dx = 0
+        dy = 0
+        if dir == 'North':
+            dy = -0.2
+        if dir == 'South':
+            dy = 0.2
+        if dir == 'East':
+            dx = 0.2
+        if dir == 'West':
+            dx = -0.2
+        moveCircle(eyes[0],(screen_x+self.gridSize*GHOST_SIZE*(-0.3+dx/1.5), screen_y-self.gridSize*GHOST_SIZE*(0.3-dy/1.5)), self.gridSize*GHOST_SIZE*0.2)
+        moveCircle(eyes[1],(screen_x+self.gridSize*GHOST_SIZE*(0.3+dx/1.5), screen_y-self.gridSize*GHOST_SIZE*(0.3-dy/1.5)), self.gridSize*GHOST_SIZE*0.2)
+        moveCircle(eyes[2],(screen_x+self.gridSize*GHOST_SIZE*(-0.3+dx), screen_y-self.gridSize*GHOST_SIZE*(0.3-dy)), self.gridSize*GHOST_SIZE*0.08)
+        moveCircle(eyes[3],(screen_x+self.gridSize*GHOST_SIZE*(0.3+dx), screen_y-self.gridSize*GHOST_SIZE*(0.3-dy)), self.gridSize*GHOST_SIZE*0.08)
+
+    def moveGhost(self, ghost, ghostIndex, prevGhost, ghostImageParts):
+        old_x, old_y = self.to_screen(self.getPosition(prevGhost))
+        new_x, new_y = self.to_screen(self.getPosition(ghost))
+        delta = new_x - old_x, new_y - old_y
+
+        for ghostImagePart in ghostImageParts:
+            move_by(ghostImagePart, delta)
+        refresh()
+
+        if ghost.scaredTimer > 0:
+            color = SCARED_COLOR
+        else:
+            color = GHOST_COLORS[ghostIndex]
+        edit(ghostImageParts[0], ('fill', color), ('outline', color))
+        self.moveEyes(self.getPosition(ghost), self.getDirection(ghost), ghostImageParts[-4:])
+        refresh()
+
+    def getPosition(self, agentState):
+        if agentState.configuration == None: return (-1000, -1000)
+        return agentState.getPosition()
+
+    def getDirection(self, agentState):
+        if agentState.configuration == None: return Directions.STOP
+        return agentState.configuration.getDirection()
+
+    def finish(self):
+        end_graphics()
+
+    def to_screen(self, point):
+        ( x, y ) = point
+        #y = self.height - y
+        x = (x + 1)*self.gridSize
+        y = (self.height  - y)*self.gridSize
+        return ( x, y )
+
+    # Fixes some TK issue with off-center circles
+    def to_screen2(self, point):
+        ( x, y ) = point
+        #y = self.height - y
+        x = (x + 1)*self.gridSize
+        y = (self.height  - y)*self.gridSize
+        return ( x, y )
+
+    def drawWalls(self, wallMatrix):
+        wallColor = WALL_COLOR
+        for xNum, x in enumerate(wallMatrix):
+            if self.capture and (xNum * 2) < wallMatrix.width: wallColor = TEAM_COLORS[0]
+            if self.capture and (xNum * 2) >= wallMatrix.width: wallColor = TEAM_COLORS[1]
+
+            for yNum, cell in enumerate(x):
+                if cell: # There's a wall here
+                    pos = (xNum, yNum)
+                    screen = self.to_screen(pos)
+                    screen2 = self.to_screen2(pos)
+
+                    # draw each quadrant of the square based on adjacent walls
+                    wIsWall = self.isWall(xNum-1, yNum, wallMatrix)
+                    eIsWall = self.isWall(xNum+1, yNum, wallMatrix)
+                    nIsWall = self.isWall(xNum, yNum+1, wallMatrix)
+                    sIsWall = self.isWall(xNum, yNum-1, wallMatrix)
+                    nwIsWall = self.isWall(xNum-1, yNum+1, wallMatrix)
+                    swIsWall = self.isWall(xNum-1, yNum-1, wallMatrix)
+                    neIsWall = self.isWall(xNum+1, yNum+1, wallMatrix)
+                    seIsWall = self.isWall(xNum+1, yNum-1, wallMatrix)
+
+                    # NE quadrant
+                    if (not nIsWall) and (not eIsWall):
+                        # inner circle
+                        circle(screen2, WALL_RADIUS * self.gridSize, wallColor, wallColor, (0,91), 'arc')
+                    if (nIsWall) and (not eIsWall):
+                        # vertical line
+                        line(add(screen, (self.gridSize*WALL_RADIUS, 0)), add(screen, (self.gridSize*WALL_RADIUS, self.gridSize*(-0.5)-1)), wallColor)
+                    if (not nIsWall) and (eIsWall):
+                        # horizontal line
+                        line(add(screen, (0, self.gridSize*(-1)*WALL_RADIUS)), add(screen, (self.gridSize*0.5+1, self.gridSize*(-1)*WALL_RADIUS)), wallColor)
+                    if (nIsWall) and (eIsWall) and (not neIsWall):
+                        # outer circle
+                        circle(add(screen2, (self.gridSize*2*WALL_RADIUS, self.gridSize*(-2)*WALL_RADIUS)), WALL_RADIUS * self.gridSize-1, wallColor, wallColor, (180,271), 'arc')
+                        line(add(screen, (self.gridSize*2*WALL_RADIUS-1, self.gridSize*(-1)*WALL_RADIUS)), add(screen, (self.gridSize*0.5+1, self.gridSize*(-1)*WALL_RADIUS)), wallColor)
+                        line(add(screen, (self.gridSize*WALL_RADIUS, self.gridSize*(-2)*WALL_RADIUS+1)), add(screen, (self.gridSize*WALL_RADIUS, self.gridSize*(-0.5))), wallColor)
+
+                    # NW quadrant
+                    if (not nIsWall) and (not wIsWall):
+                        # inner circle
+                        circle(screen2, WALL_RADIUS * self.gridSize, wallColor, wallColor, (90,181), 'arc')
+                    if (nIsWall) and (not wIsWall):
+                        # vertical line
+                        line(add(screen, (self.gridSize*(-1)*WALL_RADIUS, 0)), add(screen, (self.gridSize*(-1)*WALL_RADIUS, self.gridSize*(-0.5)-1)), wallColor)
+                    if (not nIsWall) and (wIsWall):
+                        # horizontal line
+                        line(add(screen, (0, self.gridSize*(-1)*WALL_RADIUS)), add(screen, (self.gridSize*(-0.5)-1, self.gridSize*(-1)*WALL_RADIUS)), wallColor)
+                    if (nIsWall) and (wIsWall) and (not nwIsWall):
+                        # outer circle
+                        circle(add(screen2, (self.gridSize*(-2)*WALL_RADIUS, self.gridSize*(-2)*WALL_RADIUS)), WALL_RADIUS * self.gridSize-1, wallColor, wallColor, (270,361), 'arc')
+                        line(add(screen, (self.gridSize*(-2)*WALL_RADIUS+1, self.gridSize*(-1)*WALL_RADIUS)), add(screen, (self.gridSize*(-0.5), self.gridSize*(-1)*WALL_RADIUS)), wallColor)
+                        line(add(screen, (self.gridSize*(-1)*WALL_RADIUS, self.gridSize*(-2)*WALL_RADIUS+1)), add(screen, (self.gridSize*(-1)*WALL_RADIUS, self.gridSize*(-0.5))), wallColor)
+
+                    # SE quadrant
+                    if (not sIsWall) and (not eIsWall):
+                        # inner circle
+                        circle(screen2, WALL_RADIUS * self.gridSize, wallColor, wallColor, (270,361), 'arc')
+                    if (sIsWall) and (not eIsWall):
+                        # vertical line
+                        line(add(screen, (self.gridSize*WALL_RADIUS, 0)), add(screen, (self.gridSize*WALL_RADIUS, self.gridSize*(0.5)+1)), wallColor)
+                    if (not sIsWall) and (eIsWall):
+                        # horizontal line
+                        line(add(screen, (0, self.gridSize*(1)*WALL_RADIUS)), add(screen, (self.gridSize*0.5+1, self.gridSize*(1)*WALL_RADIUS)), wallColor)
+                    if (sIsWall) and (eIsWall) and (not seIsWall):
+                        # outer circle
+                        circle(add(screen2, (self.gridSize*2*WALL_RADIUS, self.gridSize*(2)*WALL_RADIUS)), WALL_RADIUS * self.gridSize-1, wallColor, wallColor, (90,181), 'arc')
+                        line(add(screen, (self.gridSize*2*WALL_RADIUS-1, self.gridSize*(1)*WALL_RADIUS)), add(screen, (self.gridSize*0.5, self.gridSize*(1)*WALL_RADIUS)), wallColor)
+                        line(add(screen, (self.gridSize*WALL_RADIUS, self.gridSize*(2)*WALL_RADIUS-1)), add(screen, (self.gridSize*WALL_RADIUS, self.gridSize*(0.5))), wallColor)
+
+                    # SW quadrant
+                    if (not sIsWall) and (not wIsWall):
+                        # inner circle
+                        circle(screen2, WALL_RADIUS * self.gridSize, wallColor, wallColor, (180,271), 'arc')
+                    if (sIsWall) and (not wIsWall):
+                        # vertical line
+                        line(add(screen, (self.gridSize*(-1)*WALL_RADIUS, 0)), add(screen, (self.gridSize*(-1)*WALL_RADIUS, self.gridSize*(0.5)+1)), wallColor)
+                    if (not sIsWall) and (wIsWall):
+                        # horizontal line
+                        line(add(screen, (0, self.gridSize*(1)*WALL_RADIUS)), add(screen, (self.gridSize*(-0.5)-1, self.gridSize*(1)*WALL_RADIUS)), wallColor)
+                    if (sIsWall) and (wIsWall) and (not swIsWall):
+                        # outer circle
+                        circle(add(screen2, (self.gridSize*(-2)*WALL_RADIUS, self.gridSize*(2)*WALL_RADIUS)), WALL_RADIUS * self.gridSize-1, wallColor, wallColor, (0,91), 'arc')
+                        line(add(screen, (self.gridSize*(-2)*WALL_RADIUS+1, self.gridSize*(1)*WALL_RADIUS)), add(screen, (self.gridSize*(-0.5), self.gridSize*(1)*WALL_RADIUS)), wallColor)
+                        line(add(screen, (self.gridSize*(-1)*WALL_RADIUS, self.gridSize*(2)*WALL_RADIUS-1)), add(screen, (self.gridSize*(-1)*WALL_RADIUS, self.gridSize*(0.5))), wallColor)
+
+    def isWall(self, x, y, walls):
+        if x < 0 or y < 0:
+            return False
+        if x >= walls.width or y >= walls.height:
+            return False
+        return walls[x][y]
+
+    def drawFood(self, foodMatrix ):
+        foodImages = []
+        color = FOOD_COLOR
+        for xNum, x in enumerate(foodMatrix):
+            if self.capture and (xNum * 2) <= foodMatrix.width: color = TEAM_COLORS[0]
+            if self.capture and (xNum * 2) > foodMatrix.width: color = TEAM_COLORS[1]
+            imageRow = []
+            foodImages.append(imageRow)
+            for yNum, cell in enumerate(x):
+                if cell: # There's food here
+                    screen = self.to_screen((xNum, yNum ))
+                    dot = circle( screen,
+                                  FOOD_SIZE * self.gridSize,
+                                  outlineColor = color, fillColor = color,
+                                  width = 1)
+                    imageRow.append(dot)
+                else:
+                    imageRow.append(None)
+        return foodImages
+
+    def drawCapsules(self, capsules ):
+        capsuleImages = {}
+        for capsule in capsules:
+            ( screen_x, screen_y ) = self.to_screen(capsule)
+            dot = circle( (screen_x, screen_y),
+                              CAPSULE_SIZE * self.gridSize,
+                              outlineColor = CAPSULE_COLOR,
+                              fillColor = CAPSULE_COLOR,
+                              width = 1)
+            capsuleImages[capsule] = dot
+        return capsuleImages
+
+    def removeFood(self, cell, foodImages ):
+        x, y = cell
+        remove_from_screen(foodImages[x][y])
+
+    def removeCapsule(self, cell, capsuleImages ):
+        x, y = cell
+        remove_from_screen(capsuleImages[(x, y)])
+
+    def drawExpandedCells(self, cells):
+        """
+        Draws an overlay of expanded grid positions for search agents
+        """
+        n = float(len(cells))
+        baseColor = [1.0, 0.0, 0.0]
+        self.clearExpandedCells()
+        self.expandedCells = []
+        for k, cell in enumerate(cells):
+            screenPos = self.to_screen( cell)
+            cellColor = formatColor(*[(n-k) * c * .5 / n + .25 for c in baseColor])
+            block = square(screenPos,
+                     0.5 * self.gridSize,
+                     color = cellColor,
+                     filled = 1, behind=2)
+            self.expandedCells.append(block)
+            if self.frameTime < 0:
+                refresh()
+
+    def clearExpandedCells(self):
+        if 'expandedCells' in dir(self) and len(self.expandedCells) > 0:
+            for cell in self.expandedCells:
+                remove_from_screen(cell)
+
+
+    def updateDistributions(self, distributions):
+        "Draws an agent's belief distributions"
+        if self.distributionImages == None:
+            self.drawDistributions(self.previousState)
+        for x in range(len(self.distributionImages)):
+            for y in range(len(self.distributionImages[0])):
+                image = self.distributionImages[x][y]
+                weights = [dist[ (x,y) ] for dist in distributions]
+
+                if sum(weights) != 0:
+                    pass
+                # Fog of war
+                color = [0.0,0.0,0.0]
+                colors = GHOST_VEC_COLORS[1:] # With Pacman
+                if self.capture: colors = GHOST_VEC_COLORS
+                for weight, gcolor in zip(weights, colors):
+                    color = [min(1.0, c + 0.95 * g * weight ** .3) for c,g in zip(color, gcolor)]
+                changeColor(image, formatColor(*color))
+        refresh()
+
+class FirstPersonPacmanGraphics(PacmanGraphics):
+    def __init__(self, zoom = 1.0, showGhosts = True, capture = False, frameTime=0):
+        PacmanGraphics.__init__(self, zoom, frameTime=frameTime)
+        self.showGhosts = showGhosts
+        self.capture = capture
+
+    def initialize(self, state, isBlue = False):
+
+        self.isBlue = isBlue
+        PacmanGraphics.startGraphics(self, state)
+        # Initialize distribution images
+        walls = state.layout.walls
+        dist = []
+        self.layout = state.layout
+
+        # Draw the rest
+        self.distributionImages = None  # initialize lazily
+        self.drawStaticObjects(state)
+        self.drawAgentObjects(state)
+
+        # Information
+        self.previousState = state
+
+    def lookAhead(self, config, state):
+        if config.getDirection() == 'Stop':
+            return
+        else:
+            pass
+            # Draw relevant ghosts
+            allGhosts = state.getGhostStates()
+            visibleGhosts = state.getVisibleGhosts()
+            for i, ghost in enumerate(allGhosts):
+                if ghost in visibleGhosts:
+                    self.drawGhost(ghost, i)
+                else:
+                    self.currentGhostImages[i] = None
+
+    def getGhostColor(self, ghost, ghostIndex):
+        return GHOST_COLORS[ghostIndex]
+
+    def getPosition(self, ghostState):
+        if not self.showGhosts and not ghostState.isPacman and ghostState.getPosition()[1] > 1:
+            return (-1000, -1000)
+        else:
+            return PacmanGraphics.getPosition(self, ghostState)
+
+def add(x, y):
+    return (x[0] + y[0], x[1] + y[1])
+
+
+# Saving graphical output
+# -----------------------
+# Note: to make an animated gif from this postscript output, try the command:
+# convert -delay 7 -loop 1 -compress lzw -layers optimize frame* out.gif
+# convert is part of imagemagick (freeware)
+
+SAVE_POSTSCRIPT = False
+POSTSCRIPT_OUTPUT_DIR = 'frames'
+FRAME_NUMBER = 0
+import os
+
+def saveFrame():
+    "Saves the current graphical output as a postscript file"
+    global SAVE_POSTSCRIPT, FRAME_NUMBER, POSTSCRIPT_OUTPUT_DIR
+    if not SAVE_POSTSCRIPT: return
+    if not os.path.exists(POSTSCRIPT_OUTPUT_DIR): os.mkdir(POSTSCRIPT_OUTPUT_DIR)
+    name = os.path.join(POSTSCRIPT_OUTPUT_DIR, 'frame_%08d.ps' % FRAME_NUMBER)
+    FRAME_NUMBER += 1
+    writePostscript(name) # writes the current canvas
